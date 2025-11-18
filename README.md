@@ -1,4 +1,4 @@
-# Qiskit Studio - Visual Quantum Computing Interface [Preview]
+# Qiskit Studio - Visual Quantum Computing Interface [Proof of Concept]
 
 A visual web interface powered by AI for quantum computing development with Qiskit. Build quantum circuits, algorithms, and experiments through an intuitive drag-and-drop interface. This project is part of a set of experiments to generate code using AI tools.
 
