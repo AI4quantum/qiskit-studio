@@ -226,13 +226,6 @@ We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for:
 - [ ] Collaborative workspace features
 
 
-### Future Enhancements
-- [ ] **Connect with IBM Quantum MCP to run the program**: Direct integration with IBM Quantum hardware via Model Context Protocol
-- [ ] Multi-user collaborative editing
-- [ ] Advanced quantum error correction tools
-- [ ] Mobile-responsive interface
-
-
 ## License
 
 This project is licensed under the Apache License 2.0. See [LICENSE](LICENSE) for details.
