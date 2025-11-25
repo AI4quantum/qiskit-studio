@@ -68,6 +68,7 @@ frontend:
   service:
     type: NodePort
     port: 3000
+  serviceAccountName: default
   resources:
     requests:
       cpu: "100m"
@@ -93,6 +94,7 @@ chat:
     type: NodePort
     port: 8000
     nodePort: null
+  serviceAccountName: default
   resources:
     requests:
       cpu: "250m"
@@ -118,6 +120,7 @@ codegen:
     type: NodePort # Changed from NodePort, assuming exposure via ingress
     port: 8000
     nodePort: null
+  serviceAccountName: default
   resources:
     requests:
       cpu: "250m"
@@ -142,6 +145,7 @@ knowledgeMcp:
   service:
     type: ClusterIP
     port: 8030
+  serviceAccountName: default
   resources:
     requests:
       cpu: "250m"
@@ -175,6 +179,7 @@ coderun:
     type: NodePort
     port: 8000
     nodePort: null
+  serviceAccountName: default
   resources:
     requests:
       cpu: "100m"
@@ -200,6 +205,7 @@ milvus:
     type: ClusterIP
     grpcPort: 19530
     httpPort: 9091
+  serviceAccountName: default
 
   # A list of additional environment variables to be added to the milvus pod.
   # For example:
@@ -218,6 +224,7 @@ knowledgePreloaderJob:
   # Time in seconds to keep the job logs around after completion
   ttlSecondsAfterFinished: 3600
   backoffLimit: 4
+  serviceAccountName: default
   resources:
     requests:
       memory: "1Gi"

@@ -18,6 +18,7 @@ metadata:
 spec:
   template:
     spec:
+      serviceAccountName: {{ .Values.knowledgePreloaderJob.serviceAccountName }}
       initContainers:
       - name: wait-for-services
         image: busybox:1.37

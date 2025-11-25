@@ -17,6 +17,7 @@ spec:
         {{- include "qiskit-studio.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: knowledge-mcp
     spec:
+      serviceAccountName: {{ .Values.knowledgeMcp.serviceAccountName }}
       initContainers:
       {{- if .Values.global.llm.initChecks.enabled }}
       - name: wait-for-embedding-llm
