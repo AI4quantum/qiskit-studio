@@ -26,7 +26,7 @@ import { Label } from "@/components/ui/label"
 // Token obfuscation utility functions
 function obfuscateToken(text: string): string {
   if (!text) return '';
-  
+
   const key = "quantum_computing_rocks"; // Secret key
   let result = '';
   for (let i = 0; i < text.length; i++) {
@@ -39,7 +39,7 @@ function obfuscateToken(text: string): string {
 // When retrieving the token
 function deobfuscateToken(obfuscated: string): string {
   if (!obfuscated) return '';
-  
+
   try {
     const key = "quantum_computing_rocks"; // Same secret key
     const text = atob(obfuscated); // Base64 decode
@@ -151,7 +151,7 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
 
   const handleMouseMove = (e: MouseEvent) => {
     if (!isResizing) return
-    
+
     const deltaY = e.clientY - startY
     const newHeight = Math.max(60, Math.min(400, startHeight - deltaY)) // Min 60px, Max 400px - inverted
     setOutputHeight(newHeight)
@@ -179,7 +179,7 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
 
   const handleChatMouseMove = (e: MouseEvent) => {
     if (!isChatResizing) return
-    
+
     const deltaY = e.clientY - chatStartY
     const newHeight = Math.max(80, Math.min(400, chatStartHeight - deltaY)) // Min 80px, Max 400px - inverted
     setChatHeight(newHeight)
@@ -229,7 +229,7 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
     const trimmedToken = apiToken.trim()
     const trimmedInstance = instance.trim()
     const trimmedRegion = region.trim()
-    
+
     // Save all IBM Quantum parameters to localStorage for persistence
     if (typeof window !== 'undefined') {
       if (trimmedToken) {
@@ -244,7 +244,7 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
         localStorage.removeItem('ibm_quantum_region')
       }
     }
-    
+
     const config = {
       type: backendConfig,
       backend: backendConfig === 'specific' ? specificBackend : undefined,
@@ -270,12 +270,12 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
     setIsLoading(true)
     setOutputExpanded(true)
     setOutputContent(["Running your Quantum Program..."])
-    
+
     try {
       const requestPayload: any = {
         input_value: code
       }
-      
+
       // Include IBM Quantum configuration if provided
       if (apiToken.trim()) {
         requestPayload.ibm_token = apiToken.trim()
@@ -286,18 +286,18 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
         if (region.trim()) {
           requestPayload.region = region.trim()
         }
-        
+
       } else {
         console.log("🔑 Frontend: No IBM token provided")
       }
-      
+
 
       // Use environment variable for agent URL or fallback to runQuantumProgramCode
       const agentUrl = process.env.NEXT_PUBLIC_RUNCODE_URL
-      
-      
+
+
       if (agentUrl) {
-        
+
         // Call agent.py service directly
         const response = await fetch(`${agentUrl}`, {
           method: 'POST',
@@ -306,22 +306,22 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
           },
           body: JSON.stringify(requestPayload),
         })
-        
+
         const result = await response.json()
 
         if (response.ok && result.output) {
           const linesArray = result.output.split('\n');
           const filteredLines = linesArray.filter(line => line.trim() !== '')
           setOutputContent(filteredLines)
-          
+
           // Extract RESULT JSON from output
           const resultLine = filteredLines.find(line => line.includes('RESULT:'))
-          
+
           if (resultLine && onUpdatePostProcessingNode) {
             try {
               const jsonStart = resultLine.indexOf('RESULT:') + 7
               let jsonString = resultLine.substring(jsonStart).trim()
-              
+
               // If the JSON spans multiple lines, try to find the complete JSON
               if (!jsonString.endsWith('}')) {
                 const resultIndex = filteredLines.findIndex(line => line.includes('RESULT:'))
@@ -332,12 +332,12 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
                 }
                 jsonString = completeJson
               }
-              
+
               const resultJson = JSON.parse(jsonString)
-              
+
               // Validate the JSON structure
-              if (resultJson.type && resultJson.content && 
-                  ['text', 'graph', 'plot'].includes(resultJson.type)) {
+              if (resultJson.type && resultJson.content &&
+                ['text', 'graph', 'plot'].includes(resultJson.type)) {
                 onUpdatePostProcessingNode(resultJson)
               }
             } catch (jsonError) {
@@ -360,15 +360,15 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
           const linesArray = response.message.split('\n');
           const filteredLines = linesArray.filter(line => line.trim() !== '')
           setOutputContent(filteredLines)
-          
+
           // Extract RESULT JSON from output
           const resultLine = filteredLines.find(line => line.includes('RESULT:'))
-          
+
           if (resultLine && onUpdatePostProcessingNode) {
             try {
               const jsonStart = resultLine.indexOf('RESULT:') + 7
               let jsonString = resultLine.substring(jsonStart).trim()
-              
+
               // If the JSON spans multiple lines, try to find the complete JSON
               if (!jsonString.endsWith('}')) {
                 const resultIndex = filteredLines.findIndex(line => line.includes('RESULT:'))
@@ -379,12 +379,12 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
                 }
                 jsonString = completeJson
               }
-              
+
               const resultJson = JSON.parse(jsonString)
-              
+
               // Validate the JSON structure
-              if (resultJson.type && resultJson.content && 
-                  ['text', 'graph', 'plot'].includes(resultJson.type)) {
+              if (resultJson.type && resultJson.content &&
+                ['text', 'graph', 'plot'].includes(resultJson.type)) {
                 onUpdatePostProcessingNode(resultJson)
               }
             } catch (jsonError) {
@@ -416,47 +416,47 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
       { pattern: /\b(\d+\.?\d*|\.\d+)\b/, className: 'text-orange-300' },
     ];
 
-    let segments: Array<{text: string, className?: string}> = [];
-    const matches: Array<{match: RegExpMatchArray, className: string}> = [];
+    let segments: Array<{ text: string, className?: string }> = [];
+    const matches: Array<{ match: RegExpMatchArray, className: string }> = [];
 
-    patterns.forEach(({pattern, className}) => {
+    patterns.forEach(({ pattern, className }) => {
       let match;
       const regex = new RegExp(pattern.source, pattern.flags + 'g');
       while ((match = regex.exec(line)) !== null) {
-        matches.push({match, className});
+        matches.push({ match, className });
       }
     });
 
     matches.sort((a, b) => a.match.index! - b.match.index!);
 
-    const filteredMatches: Array<{match: RegExpMatchArray, className: string}> = [];
+    const filteredMatches: Array<{ match: RegExpMatchArray, className: string }> = [];
     let lastEndIndex = -1;
 
-    matches.forEach(({match, className}) => {
+    matches.forEach(({ match, className }) => {
       if (match.index! >= lastEndIndex) {
-        filteredMatches.push({match, className});
+        filteredMatches.push({ match, className });
         lastEndIndex = match.index! + match[0].length;
       }
     });
 
     let lastIndex = 0;
-    filteredMatches.forEach(({match, className}) => {
+    filteredMatches.forEach(({ match, className }) => {
       if (match.index! > lastIndex) {
         const beforeText = line.slice(lastIndex, match.index!);
         if (beforeText) {
-          segments.push({text: beforeText});
+          segments.push({ text: beforeText });
         }
       }
-      segments.push({text: match[0], className});
+      segments.push({ text: match[0], className });
       lastIndex = match.index! + match[0].length;
     });
 
     if (lastIndex < line.length) {
-      segments.push({text: line.slice(lastIndex)});
+      segments.push({ text: line.slice(lastIndex) });
     }
 
     if (segments.length === 0) {
-      segments.push({text: line});
+      segments.push({ text: line });
     }
 
     return segments;
@@ -506,11 +506,11 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
       // Wait a bit for the DOM to update with highlighting
       setTimeout(() => {
         const highlightedElements = document.querySelectorAll('[class*="bg-blue-600"]')
-        
+
         if (highlightedElements.length > 0) {
           // Use scrollIntoView with scrolling constrained to nearest scrollable ancestor
-          highlightedElements[0].scrollIntoView({ 
-            behavior: 'smooth', 
+          highlightedElements[0].scrollIntoView({
+            behavior: 'smooth',
             block: 'center',
             inline: 'nearest'
           })
@@ -522,18 +522,18 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
   // Optimized SSE parser for the specific server format
   const parseSSEData = (chunk: string): string | null => {
     if (!chunk.startsWith('data: ')) return null
-    
+
     const data = chunk.slice(6).trim()
     if (data === '[DONE]') return null
-    
+
     try {
       const parsed = JSON.parse(data)
-      
+
       // Only extract content from the llm_step field, ignore all other steps
       if (parsed.step_name === 'llm_step' && parsed.step_result) {
         return parsed.step_result
       }
-      
+
       // Return null for all other steps to ignore them
       return null
     } catch {
@@ -564,10 +564,10 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
       id: messageId,
       streaming: true
     }
-    
+
     setMessages((prev) => [...prev, streamingMessage])
     setStreamingMessageId(messageId)
-    
+
     const response = await generateStreamingChatResponse({
       message: input,
       sessionId: "user_1"
@@ -591,7 +591,7 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
     const content = response.success && response.message
       ? response.message
       : response.error || "Sorry, I couldn't process that request."
-    
+
     setMessages((prev) => [...prev, { role: "assistant", content }])
     setIsLoading(false)
   }
@@ -599,17 +599,17 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
   const simulateTypingEffect = async (messageId: string, content: string) => {
     const words = content.split(' ')
     let displayedContent = ''
-    
+
     for (let i = 0; i < words.length; i++) {
       displayedContent += (i > 0 ? ' ' : '') + words[i]
       // Remove "Thinking..." indicator once we start showing content
       updateStreamingMessage(messageId, displayedContent, false)
-      
+
       // Much faster delay - only 15-30ms per word
       const delay = Math.min(Math.max(words[i].length * 2, 15), 30)
       await new Promise(resolve => setTimeout(resolve, delay))
     }
-    
+
     // Final update to mark as not streaming
     updateStreamingMessage(messageId, content, false)
   }
@@ -619,19 +619,19 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
     const decoder = new TextDecoder()
     let buffer = ''
     let hasStartedStreaming = false
-    
+
     try {
       while (true) {
         const { done, value } = await reader.read()
         if (done) break
-        
+
         const chunk = decoder.decode(value, { stream: true })
         buffer += chunk
-        
+
         // Process complete lines immediately as they arrive
         const lines = buffer.split('\n')
         buffer = lines.pop() || '' // Keep incomplete line in buffer
-        
+
         for (const line of lines) {
           if (line.trim()) {
             const content = parseSSEData(line)
@@ -644,7 +644,7 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
           }
         }
       }
-      
+
       // Handle remaining buffer if no content was streamed yet
       if (buffer.trim() && !hasStartedStreaming) {
         const content = parseSSEData(buffer)
@@ -719,13 +719,12 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
 
   return (
     <div
-      className={`${
-        maximized
-          ? "w-[40vw]"
-          : expanded
-            ? "w-[422px]"
-            : "w-10"
-      } border-l bg-[#1e1e1e] transition-all duration-300 flex flex-col`}
+      className={`${maximized
+        ? "w-[40vw]"
+        : expanded
+          ? "w-[422px]"
+          : "w-10"
+        } border-l bg-[#1e1e1e] transition-all duration-300 flex flex-col`}
     >
       {expanded ? (
         <>
@@ -735,7 +734,7 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-6 w-6 text-white hover:bg-zinc-800 rounded-none"
+                className="h-6 w-6 text-white hover:text-[#CECECE] hover:bg-[#333] rounded-none"
                 onClick={() => setExpanded(false)}
               >
                 <ChevronDown className="h-4 w-4" />
@@ -761,7 +760,7 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-6 w-6 text-white hover:bg-zinc-800 rounded-none"
+                    className="h-6 w-6 text-white hover:text-[#CECECE] hover:bg-[#333] rounded-none"
                     title="Backend Preferences"
                   >
                     <Sliders className="h-4 w-4" />
@@ -807,7 +806,7 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
                         }}
                         placeholder="Enter your IBM Quantum API token"
                         className="px-3 py-2 border border-gray-300 rounded-md text-sm text-white"
-                        style={{ 
+                        style={{
                           backgroundColor: '#2a2a2a',
                           borderColor: '#4a4a4a',
                           color: 'white'
@@ -815,9 +814,9 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
                       />
                       <p className="text-xs text-gray-500">
                         Get your API token from the{' '}
-                        <a 
-                          href="https://quantum.ibm.com/account" 
-                          target="_blank" 
+                        <a
+                          href="https://quantum.ibm.com/account"
+                          target="_blank"
                           rel="noopener noreferrer"
                           className="text-blue-600 hover:underline"
                         >
@@ -834,7 +833,7 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
                         onChange={(e) => setInstance(e.target.value)}
                         placeholder="crn:v1:bluemix:public:quantum-computing:us-east:a/..."
                         className="px-3 py-2 border border-gray-300 rounded-md text-sm text-white"
-                        style={{ 
+                        style={{
                           backgroundColor: '#2a2a2a',
                           borderColor: '#4a4a4a',
                           color: 'white'
@@ -852,7 +851,7 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
                         value={region}
                         onChange={(e) => setRegion(e.target.value)}
                         className="px-3 py-2 border border-gray-300 rounded-md text-sm text-white"
-                        style={{ 
+                        style={{
                           backgroundColor: '#2a2a2a',
                           borderColor: '#4a4a4a',
                           color: 'white'
@@ -880,7 +879,7 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-6 w-6 text-white hover:bg-zinc-800 rounded-none"
+                className="h-6 w-6 text-white hover:text-[#CECECE] hover:bg-[#333] rounded-none"
                 onClick={() => setMaximized(!maximized)}
                 title={maximized ? "Restore size" : "Maximize"}
               >
@@ -889,7 +888,7 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-6 w-6 text-white hover:bg-zinc-800 rounded-none"
+                className="h-6 w-6 text-white hover:text-[#CECECE] hover:bg-[#333] rounded-none"
                 onClick={copyToClipboard}
               >
                 <CopyIcon className="h-4 w-4" />
@@ -924,7 +923,7 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
           {/* Output Section */}
           <div className="border-t border-[#333] bg-[#212729]">
             {/* Output Header */}
-            <div 
+            <div
               className="bg-[#171717] text-white px-3 py-2 flex justify-between items-center cursor-ns-resize select-none"
               onMouseDown={handleMouseDown}
               title="Drag to resize output panel"
@@ -933,7 +932,7 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-4 w-4 text-white hover:bg-zinc-800 rounded-none pointer-events-auto"
+                className="h-4 w-4 text-white hover:text-[#CECECE] hover:bg-[#333] rounded-none pointer-events-auto"
                 onClick={() => setOutputExpanded(!outputExpanded)}
               >
                 {outputExpanded ? <ChevronDown className="h-3 w-3" /> : <ChevronUp className="h-3 w-3" />}
@@ -942,7 +941,7 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
 
             {/* Output Content */}
             {outputExpanded && (
-              <ScrollArea 
+              <ScrollArea
                 className="p-2 bg-[#212729]"
                 style={{ height: `${outputHeight}px` }}
               >
@@ -967,7 +966,7 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
           {/* Chat Section */}
           <div className="border-t border-[#333] bg-[#212729]">
             {/* Chat Header */}
-            <div 
+            <div
               className="bg-[#171717] text-white px-3 py-2 flex justify-between items-center cursor-ns-resize select-none"
               onMouseDown={handleChatMouseDown}
               title="Drag to resize chat panel"
@@ -976,7 +975,7 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
             </div>
 
             {/* Chat Messages */}
-            <ScrollArea 
+            <ScrollArea
               className="p-2 bg-[#212729]"
               style={{ height: `${chatHeight}px` }}
             >
@@ -984,9 +983,8 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
                 {messages.map((message, index) => (
                   <div key={index} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                     <div
-                      className={`max-w-[80%] rounded px-2 py-1 text-xs ${
-                        message.role === "user" ? "bg-[#2563EB] text-white" : "bg-[#333] text-[#eee]"
-                      }`}
+                      className={`max-w-[80%] rounded px-2 py-1 text-xs ${message.role === "user" ? "bg-[#2563EB] text-white" : "bg-[#333] text-[#eee]"
+                        }`}
                     >
                       {message.role === "user" ? (
                         <p>{message.content}</p>
@@ -1039,7 +1037,7 @@ export function CodePanel({ code, selectedNode, onSelectDemo, highlightSection, 
           <Button
             variant="ghost"
             size="icon"
-            className="h-10 w-10 text-white hover:bg-zinc-800 mt-2"
+            className="h-10 w-10 text-white hover:text-[#CECECE] hover:bg-[#333] mt-2"
             onClick={() => setExpanded(true)}
           >
             <ChevronUp className="h-4 w-4" />

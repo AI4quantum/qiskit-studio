@@ -33,7 +33,7 @@ export function Sidebar({ onAddNode, onLoadDemo }: SidebarProps) {
     {
       id: "map",
       name: "Map",
-      icon: <MapIcon className="h-4 w-4 text-black" />,
+      icon: <MapIcon className="h-4 w-4 text-[#D02771]" />,
       nodes: [
         {
           id: "quantumInfoNode",
@@ -88,7 +88,7 @@ mol.build(
     {
       id: "optimize",
       name: "Optimize",
-      icon: <OptimizeIcon className="h-4 w-4 text-black" />,
+      icon: <OptimizeIcon className="h-4 w-4 text-[#893FFC]" />,
       nodes: [
         {
           id: "transpilerNode",
@@ -105,7 +105,7 @@ mol.build(
     {
       id: "execute",
       name: "Execute",
-      icon: <ExecuteIcon className="h-4 w-4 text-black" />,
+      icon: <ExecuteIcon className="h-4 w-4 text-[#0E62FE]" />,
       nodes: [
         {
           id: "executionNode",
@@ -122,7 +122,7 @@ mol.build(
     {
       id: "post-process",
       name: "Post-process",
-      icon: <PostProcessIcon className="h-4 w-4 text-black" />,
+      icon: <PostProcessIcon className="h-4 w-4 text-[#1A8038]" />,
       nodes: [
         {
           id: "visualizationNode",
