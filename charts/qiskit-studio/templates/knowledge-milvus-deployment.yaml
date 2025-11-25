@@ -17,6 +17,7 @@ spec:
         {{- include "qiskit-studio.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: milvus
     spec:
+      serviceAccountName: {{ .Values.milvus.serviceAccountName }}
       securityContext: {{- toYaml .Values.milvus.securityContext | nindent 8 }}
       containers:
       - name: milvus
