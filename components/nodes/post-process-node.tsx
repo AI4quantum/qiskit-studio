@@ -11,6 +11,7 @@ import { Card } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Info, Maximize2, Wand2, Loader2 } from "lucide-react"
+import { PostProcessIcon } from "@/components/icons/post-process-icon"
 import { Spinner } from "@/components/ui/spinner"
 import {
   Dialog,
@@ -122,8 +123,8 @@ for i in range(iterations):
   }
 
   const [inputValue, setInputValue] = useState(
-    data.inputCode || 
-    data.inputValue || 
+    data.inputCode ||
+    data.inputValue ||
     getDefaultInputValue()
   )
   const [isInfoOpen, setIsInfoOpen] = useState(false)
@@ -154,11 +155,11 @@ for i in range(iterations):
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       })
-      
+
       if (!response.ok) {
         throw new Error(`API request failed with status ${response.status}`)
       }
-      
+
       const result = await response.json()
 
       let newCode = ""
@@ -206,27 +207,27 @@ for i in range(iterations):
     if (!data.pythonCode || !inputValue.trim()) {
       return data.pythonCode || ''
     }
-    
-    const inputSectionRegex = /(#{4,6}\\s*INPUT PYTHON[\\s\\S]*?)(#{4,6}\\s*END INPUT PYTHON)/g
+
+    const inputSectionRegex = /(#{4,6}\s*INPUT PYTHON[\s\S]*?)(#{4,6}\s*END INPUT PYTHON)/g
     return data.pythonCode.replace(inputSectionRegex, (_, start, end) => {
-      return start.split('\\n')[0] + '\\n' + inputValue.trim() + '\\n' + end
+      return start.split('\n')[0] + '\n' + inputValue.trim() + '\n' + end
     })
   }
 
   return (
     <>
-      <Handle 
-        type="target" 
-        position={Position.Top} 
-        isConnectable={isConnectable} 
-        style={{ 
-          backgroundColor: 'white', 
-          border: '1px solid #1A8038', 
-          borderRadius: '50%', 
-          width: '16px', 
-          height: '16px', 
-          display: 'flex', 
-          alignItems: 'center', 
+      <Handle
+        type="target"
+        position={Position.Top}
+        isConnectable={isConnectable}
+        style={{
+          backgroundColor: 'white',
+          border: '1px solid #1A8038',
+          borderRadius: '50%',
+          width: '16px',
+          height: '16px',
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
           top: '-20px'
         }}
@@ -236,7 +237,7 @@ for i in range(iterations):
       <Card className="w-64 border-0 shadow-md rounded-none overflow-hidden">
         <div className="bg-[#DDFBE5] h-12 flex items-center">
           <div className="w-12 h-12 bg-[#1A8038] flex items-center justify-center text-white mr-2">
-            <img src="/node_icons/post-process.svg" alt="Post Process" width="24" height="24" className="filter brightness-0 invert" />
+            <PostProcessIcon className="w-6 h-6 text-white" />
           </div>
           <div className="text-sm font-medium text-black flex-1 flex items-center">
             {data.label}
@@ -337,18 +338,18 @@ for i in range(iterations):
           </DialogContent>
         </Dialog>
       </Card>
-      <Handle 
-        type="source" 
-        position={Position.Bottom} 
-        isConnectable={isConnectable} 
-        style={{ 
-          backgroundColor: 'white', 
-          border: '1px solid #1A8038', 
-          borderRadius: '50%', 
-          width: '16px', 
-          height: '16px', 
-          display: 'flex', 
-          alignItems: 'center', 
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        isConnectable={isConnectable}
+        style={{
+          backgroundColor: 'white',
+          border: '1px solid #1A8038',
+          borderRadius: '50%',
+          width: '16px',
+          height: '16px',
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
           bottom: '-20px'
         }}

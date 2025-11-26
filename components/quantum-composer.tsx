@@ -186,8 +186,8 @@ function QuantumComposerInner() {
   const [nodeParameters, setNodeParameters] = useState<{ [nodeId: string]: any }>({})
   const [fullCode, setFullCode] = useState('');
   const [initialParsedNodeData, setInitialParsedNodeData] = useState<{ [key: string]: { pythonCode: string, inputCode?: string } }>({});
-  
-  
+
+
   // Initialize AI code generation hook first
   const {
     isGenerating: isUpdatingCode,
@@ -226,7 +226,7 @@ function QuantumComposerInner() {
               outputCode = `# Plot visualization\nimport matplotlib.pyplot as plt\nimport json\n\n# Parse plot data\ndata = json.loads('${JSON.stringify(resultJson.content)}')\nprint("Plot data loaded successfully")`;
               break;
           }
-          
+
           // Handle content based on type
           let processedContent = resultJson.content;
           if (resultJson.type === 'text' && typeof resultJson.content === 'string') {
@@ -234,8 +234,8 @@ function QuantumComposerInner() {
             processedContent = resultJson.content.replace(/\\n/g, '\n');
           } else if (resultJson.type === 'graph' || resultJson.type === 'plot') {
             // For graph/plot data, ensure it's a JSON string for the VisualizationNode
-            processedContent = typeof resultJson.content === 'string' 
-              ? resultJson.content 
+            processedContent = typeof resultJson.content === 'string'
+              ? resultJson.content
               : JSON.stringify(resultJson.content);
           }
 
@@ -259,10 +259,10 @@ function QuantumComposerInner() {
 
   // Add a ref to track ongoing API calls to prevent duplicates
   const ongoingAPICalls = useRef<Set<string>>(new Set());
-  
+
   // Track chemistry node updates that are waiting for code generation
   const [pendingChemistryUpdates, setPendingChemistryUpdates] = useState<Set<string>>(new Set());
-  
+
   // Track the expected molecular changes to verify when they're actually applied
   const [expectedMolecularChanges, setExpectedMolecularChanges] = useState<Map<string, string>>(new Map());
 
@@ -320,7 +320,7 @@ function QuantumComposerInner() {
         (async () => {
           // Track this API call
           ongoingAPICalls.current.add(callKey);
-          
+
           try {
             const response = await generateCodeForParameter({
               nodeId,
@@ -335,7 +335,7 @@ function QuantumComposerInner() {
             if (response.success && response.code) {
               // For chemistry nodes with molecule parameter, update inputCode instead of pythonCode
               const isChemistryMoleculeUpdate = (node.type === 'chemistryNode' || node.type === 'chemistryMapNode') && parameterName === 'molecule';
-              
+
               // Track chemistry updates that need to wait for code generation
               if (isChemistryMoleculeUpdate) {
                 setPendingChemistryUpdates(prev => new Set(prev).add(nodeId));
@@ -346,25 +346,25 @@ function QuantumComposerInner() {
                   return newMap;
                 });
               }
-              
+
               setNodes(currentNodes => {
                 const updatedNodes = currentNodes.map(n => {
                   if (n.id === nodeId) {
-                    return { 
-                      ...n, 
-                      data: { 
-                        ...n.data, 
-                        ...(isChemistryMoleculeUpdate 
-                          ? { inputCode: response.code } 
+                    return {
+                      ...n,
+                      data: {
+                        ...n.data,
+                        ...(isChemistryMoleculeUpdate
+                          ? { inputCode: response.code }
                           : { pythonCode: response.code }
                         ),
                         lastUpdated: Date.now()
-                      } 
+                      }
                     };
                   }
                   return n;
                 });
-                
+
                 return updatedNodes;
               });
 
@@ -383,7 +383,7 @@ function QuantumComposerInner() {
                   }
                 }));
               }
-              
+
             } else {
               if (response.error) {
                 alert(`Failed to update code: ${response.error}`);
@@ -415,7 +415,7 @@ function QuantumComposerInner() {
           isUpdating: isNodeCurrentlyUpdating(node.id)
         }
       }));
-      
+
       setNodes(enhancedNodes)
       setEdges(demo.edges)
       setTimeout(() => fitView({ padding: 0.1 }), 100)
@@ -427,27 +427,27 @@ function QuantumComposerInner() {
     if (currentDemoId && hasDemoPythonCode(currentDemoId)) {
       loadDemoPythonCode(currentDemoId).then((code) => {
         setDemoPythonCode(code);
-        
+
         const parsed = parseDemoNodes(code, currentDemoId || '');
         const nodeDataMap: { [key: string]: { pythonCode: string, inputCode?: string } } = {};
-        
+
         parsed.nodes.forEach(node => {
           nodeDataMap[node.title] = {
             pythonCode: node.pythonCode,
             inputCode: node.inputCode
           };
         });
-        
+
         setParsedNodeData(nodeDataMap);
         setInitialParsedNodeData(nodeDataMap);
-        
+
         setNodes(currentNodes => {
           const updatedNodes = currentNodes.map(node => {
             const demoPythonCode = findNodePythonCode(node.data.label, nodeDataMap);
             const demoInputCode = findNodeInputCode(node.data.label, nodeDataMap);
-            
+
             const shouldUseExistingCode = node.data.lastUpdated && node.data.pythonCode;
-            
+
             return {
               ...node,
               data: {
@@ -460,7 +460,7 @@ function QuantumComposerInner() {
               }
             };
           });
-          
+
           return updatedNodes;
         });
       });
@@ -472,17 +472,17 @@ function QuantumComposerInner() {
 
   const generateBackendConfig = useCallback(() => {
     if (!backendConfig) return ''
-    
+
     let configCode = '## STEP 0 : IBM Quantum Config\n'
     configCode += 'from qiskit_ibm_runtime import QiskitRuntimeService\n\n'
     configCode += 'service = QiskitRuntimeService()\n'
-    
+
     if (backendConfig.type === 'specific' && backendConfig.backend) {
       configCode += `backend = service.backend("${backendConfig.backend}")\n`
     } else {
       configCode += 'backend = service.least_busy(operational=True, simulator=False)\n'
     }
-    
+
     return configCode + '\n'
   }, [backendConfig])
 
@@ -520,51 +520,51 @@ function QuantumComposerInner() {
       // Handle backend configuration
       const backendConfigCode = generateBackendConfig();
       const hasOriginalStep0 = reconstructedCode.includes('## STEP 0 : IBM Quantum Config');
-      
+
       if (backendConfigCode && hasOriginalStep0) {
         const lines = reconstructedCode.split('\n');
         const cleanedLines = [];
         let skipIBMConfig = false;
-        
+
         for (let i = 0; i < lines.length; i++) {
           const line = lines[i];
-          
+
           if (line.includes('## STEP 0 : IBM Quantum Config')) {
             skipIBMConfig = true;
             continue;
           }
-          
+
           if (skipIBMConfig) {
             if (line.includes('from qiskit_ibm_runtime import QiskitRuntimeService') ||
-                line.includes('service = QiskitRuntimeService()') ||
-                line.includes('backend = service.backend') ||
-                line.includes('backend = service.least_busy') ||
-                line.trim() === '') {
+              line.includes('service = QiskitRuntimeService()') ||
+              line.includes('backend = service.backend') ||
+              line.includes('backend = service.least_busy') ||
+              line.trim() === '') {
               continue;
             }
-            
+
             if (line.startsWith('##') || (line.trim() !== '' && !line.includes('from qiskit_ibm_runtime'))) {
               skipIBMConfig = false;
             }
           }
-          
+
           if (!skipIBMConfig) {
             cleanedLines.push(line);
           }
         }
-        
+
         setFullCode(backendConfigCode + cleanedLines.join('\n'));
       } else if (backendConfigCode && !hasOriginalStep0) {
         setFullCode(backendConfigCode + reconstructedCode);
       } else {
         setFullCode(reconstructedCode);
       }
-      
+
       // Clear pending chemistry updates only when the expected molecular code is actually in fullCode
       if (pendingChemistryUpdates.size > 0) {
         const updatesStillPending = new Set<string>();
         const changesStillPending = new Map<string, string>();
-        
+
         pendingChemistryUpdates.forEach(nodeId => {
           const expectedCode = expectedMolecularChanges.get(nodeId);
           if (expectedCode && reconstructedCode.includes(expectedCode)) {
@@ -577,7 +577,7 @@ function QuantumComposerInner() {
             }
           }
         });
-        
+
         setPendingChemistryUpdates(updatesStillPending);
         setExpectedMolecularChanges(changesStillPending);
       }
@@ -586,12 +586,12 @@ function QuantumComposerInner() {
       // Handle non-demo cases
       const baseCode = selectedNode
         ? generateQiskitCode(
-            [selectedNode],
-            edges.filter((e) => e.source === selectedNode.id || e.target === selectedNode.id),
-          )
+          [selectedNode],
+          edges.filter((e) => e.source === selectedNode.id || e.target === selectedNode.id),
+        )
         : generateQiskitCode(nodes, edges);
       setFullCode(baseCode);
-      
+
       // Clear any pending updates since we're not in demo mode
       if (pendingChemistryUpdates.size > 0) {
         setPendingChemistryUpdates(new Set());
@@ -602,16 +602,32 @@ function QuantumComposerInner() {
   }, [nodes, edges, selectedNode, currentDemoId, demoPythonCode, initialParsedNodeData, nodeInputs, pendingChemistryUpdates, expectedMolecularChanges, backendConfig, generateBackendConfig]);
 
   const onConnect = (params: Edge | Connection) => {
-    let edgeStyle = { stroke: "#2563EB" }
+    let edgeStyle = { stroke: "#0E62FE" } // Default Execute color
 
     const sourceNode = nodes.find((node) => node.id === params.source)
     if (sourceNode) {
-      if (sourceNode.type === "quantumInfoNode" || sourceNode.type === "circuitLibraryNode") {
-        edgeStyle = { stroke: "#8a3ffc" }
-      } else if (sourceNode.type === "transpilerNode") {
-        edgeStyle = { stroke: "#e83e8c" }
-      } else if (sourceNode.type === "visualizationNode") {
-        edgeStyle = { stroke: "#28a745" }
+      // Map category nodes - #D02771
+      if (sourceNode.type === "quantumInfoNode" ||
+        sourceNode.type === "circuitLibraryNode" ||
+        sourceNode.type === "chemistryMapNode" ||
+        sourceNode.type === "chemistryNode" ||
+        sourceNode.type === "pythonNode") {
+        edgeStyle = { stroke: "#D02771" }
+      }
+      // Optimize category nodes - #893FFC
+      else if (sourceNode.type === "transpilerNode" ||
+        sourceNode.type === "transpilerPassNode") {
+        edgeStyle = { stroke: "#893FFC" }
+      }
+      // Execute category nodes - #0E62FE
+      else if (sourceNode.type === "executionNode" ||
+        sourceNode.type === "runtimeNode") {
+        edgeStyle = { stroke: "#0E62FE" }
+      }
+      // Post-process category nodes - #1A8038
+      else if (sourceNode.type === "visualizationNode" ||
+        sourceNode.type === "postProcessNode") {
+        edgeStyle = { stroke: "#1A8038" }
       }
     }
 
@@ -623,7 +639,7 @@ function QuantumComposerInner() {
 
   const onNodeClick = (_: React.MouseEvent, node: Node) => {
     setSelectedNode(node)
-    
+
     if (currentDemoId && demoPythonCode) {
       const highlighted = getHighlightedCodeForNode(
         demoPythonCode,
@@ -631,7 +647,7 @@ function QuantumComposerInner() {
         node.data?.category,
         node.data?.label
       )
-      
+
       if (highlighted.highlightSection) {
         const offset = getBackendConfigOffset()
         const adjustedHighlightSection = {
@@ -680,32 +696,32 @@ function QuantumComposerInner() {
     if (nodeDataMap[nodeLabel]) {
       return nodeDataMap[nodeLabel].pythonCode;
     }
-    
+
     for (const [key, value] of Object.entries(nodeDataMap)) {
-      if (key.toLowerCase().includes(nodeLabel.toLowerCase()) || 
-          nodeLabel.toLowerCase().includes(key.toLowerCase())) {
+      if (key.toLowerCase().includes(nodeLabel.toLowerCase()) ||
+        nodeLabel.toLowerCase().includes(key.toLowerCase())) {
         return (value as any).pythonCode;
       }
     }
-    
+
     return undefined;
   };
-  
+
   const findNodeInputCode = (nodeLabel: string, nodeDataMap: any) => {
     if (nodeDataMap[nodeLabel]) {
       return nodeDataMap[nodeLabel].inputCode;
     }
-    
+
     for (const [key, value] of Object.entries(nodeDataMap)) {
-      if (key.toLowerCase().includes(nodeLabel.toLowerCase()) || 
-          nodeLabel.toLowerCase().includes(key.toLowerCase())) {
+      if (key.toLowerCase().includes(nodeLabel.toLowerCase()) ||
+        nodeLabel.toLowerCase().includes(key.toLowerCase())) {
         return (value as any).inputCode;
       }
     }
-    
+
     return undefined;
   };
-  
+
   const onLoadDemo = useCallback((demoId: string) => {
     const demo = getDemoById(demoId)
     if (demo) {
@@ -718,7 +734,7 @@ function QuantumComposerInner() {
           isUpdating: false
         }
       }));
-      
+
       setNodes(enhancedDemoNodes)
       setEdges(demo.edges)
       setSelectedNode(null)
@@ -731,9 +747,9 @@ function QuantumComposerInner() {
 
   return (
     <div className="flex h-screen">
-      <Sidebar 
-        onAddNode={onAddNode} 
-        onLoadDemo={onLoadDemo} 
+      <Sidebar
+        onAddNode={onAddNode}
+        onLoadDemo={onLoadDemo}
       />
       <div className="flex flex-1">
         <div className="flex-1 h-full">

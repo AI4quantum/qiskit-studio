@@ -11,6 +11,7 @@ import { Card } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Info, Maximize2 } from "lucide-react"
+import { MapIcon } from "@/components/icons/map-icon"
 import { Spinner } from "@/components/ui/spinner"
 import {
   Dialog,
@@ -35,8 +36,8 @@ interface ChemistryMapNodeData {
 
 export const ChemistryMapNode = memo(({ id, data, isConnectable }: NodeProps<ChemistryMapNodeData>) => {
   const [inputValue, setInputValue] = useState(
-    data.inputCode || 
-    data.inputValue || 
+    data.inputCode ||
+    data.inputValue ||
     `mol = pyscf.gto.Mole()\nmol.build(\n    atom=[["N", (0, 0, 0)], ["N", (1.0, 0, 0)]],\n    basis="6-31g",\n    symmetry="Dooh",\n)`
   )
   const [isInfoOpen, setIsInfoOpen] = useState(false)
@@ -67,7 +68,7 @@ export const ChemistryMapNode = memo(({ id, data, isConnectable }: NodeProps<Che
     if (!data.pythonCode || !inputValue.trim()) {
       return data.pythonCode || ''
     }
-    
+
     const inputSectionRegex = /(#{4,6}\s*INPUT PYTHON[\s\S]*?)(#{4,6}\s*END INPUT PYTHON)/g
     return data.pythonCode.replace(inputSectionRegex, (match, start, end) => {
       return start.split('\n')[0] + '\n' + inputValue.trim() + '\n' + end
@@ -78,7 +79,7 @@ export const ChemistryMapNode = memo(({ id, data, isConnectable }: NodeProps<Che
     <Card className="w-64 border-0 shadow-md rounded-none overflow-hidden">
       <div className="bg-[#FFEFF7] h-12 flex items-center">
         <div className="w-12 h-12 bg-[#D02771] flex items-center justify-center text-white mr-2">
-          <img src="/node_icons/map.svg" alt="Map" width="24" height="24" className="filter brightness-0 invert" />
+          <MapIcon className="w-6 h-6 text-white" />
         </div>
         <div className="text-sm font-medium text-black flex-1 flex items-center">
           {data.label}
@@ -173,36 +174,36 @@ export const ChemistryMapNode = memo(({ id, data, isConnectable }: NodeProps<Che
         </DialogContent>
       </Dialog>
 
-      <Handle 
-        type="target" 
-        position={Position.Top} 
-        isConnectable={isConnectable} 
-        style={{ 
-          backgroundColor: 'white', 
-          border: '1px solid #D02771', 
-          borderRadius: '50%', 
-          width: '16px', 
-          height: '16px', 
-          display: 'flex', 
-          alignItems: 'center', 
+      <Handle
+        type="target"
+        position={Position.Top}
+        isConnectable={isConnectable}
+        style={{
+          backgroundColor: 'white',
+          border: '1px solid #D02771',
+          borderRadius: '50%',
+          width: '16px',
+          height: '16px',
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
           top: '-20px'
         }}
       >
         <div style={{ backgroundColor: '#D02771', borderRadius: '50%', width: '6px', height: '6px' }} />
       </Handle>
-      <Handle 
-        type="source" 
-        position={Position.Bottom} 
-        isConnectable={isConnectable} 
-        style={{ 
-          backgroundColor: 'white', 
-          border: '1px solid #D02771', 
-          borderRadius: '50%', 
-          width: '16px', 
-          height: '16px', 
-          display: 'flex', 
-          alignItems: 'center', 
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        isConnectable={isConnectable}
+        style={{
+          backgroundColor: 'white',
+          border: '1px solid #D02771',
+          borderRadius: '50%',
+          width: '16px',
+          height: '16px',
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
           bottom: '-20px'
         }}

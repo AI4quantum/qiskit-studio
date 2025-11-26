@@ -11,6 +11,7 @@ import { Card } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Info } from "lucide-react"
+import { MapIcon } from "@/components/icons/map-icon"
 import { Spinner } from "@/components/ui/spinner"
 import {
   Dialog,
@@ -36,7 +37,7 @@ export const QuantumInfoNode = memo(({ id, data, isConnectable }: NodeProps<Quan
 
   const handleCategoryChange = (value: string) => {
     setCategory(value)
-    
+
     const quantumInfoCode = `quantum_info_type = "${value}"
 if quantum_info_type == "Hamiltonian":
     from qiskit.quantum_info import Hamiltonian
@@ -52,20 +53,16 @@ elif quantum_info_type == "Operator":
     operator = Operator.from_circuit(circuit)
 else:
     print("Unknown quantum info type")`
-    
+
     data.onInputChange?.(id || '', quantumInfoCode)
     data.onParameterChange?.(id || '', 'quantum_info_type', value)
   }
-  
+
   return (
     <Card className="w-64 border-0 shadow-md rounded-none overflow-hidden">
       <div className="bg-[#FFEFF7] h-12 flex items-center">
         <div className="w-12 h-12 bg-[#D02771] flex items-center justify-center text-white mr-2">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M12 8v8" />
-            <path d="M8 12h8" />
-          </svg>
+          <MapIcon className="w-6 h-6 text-white" />
         </div>
         <div className="text-sm font-medium text-black flex-1 flex items-center">
           {data.label}
@@ -118,36 +115,36 @@ else:
           )}
         </div>
       </div>
-      <Handle 
-        type="target" 
-        position={Position.Top} 
-        isConnectable={isConnectable} 
-        style={{ 
-          backgroundColor: 'white', 
-          border: '1px solid #D02771', 
-          borderRadius: '50%', 
-          width: '16px', 
-          height: '16px', 
-          display: 'flex', 
-          alignItems: 'center', 
+      <Handle
+        type="target"
+        position={Position.Top}
+        isConnectable={isConnectable}
+        style={{
+          backgroundColor: 'white',
+          border: '1px solid #D02771',
+          borderRadius: '50%',
+          width: '16px',
+          height: '16px',
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
           top: '-20px'
         }}
       >
         <div style={{ backgroundColor: '#D02771', borderRadius: '50%', width: '6px', height: '6px' }} />
       </Handle>
-      <Handle 
-        type="source" 
-        position={Position.Bottom} 
-        isConnectable={isConnectable} 
-        style={{ 
-          backgroundColor: 'white', 
-          border: '1px solid #D02771', 
-          borderRadius: '50%', 
-          width: '16px', 
-          height: '16px', 
-          display: 'flex', 
-          alignItems: 'center', 
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        isConnectable={isConnectable}
+        style={{
+          backgroundColor: 'white',
+          border: '1px solid #D02771',
+          borderRadius: '50%',
+          width: '16px',
+          height: '16px',
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
           bottom: '-20px'
         }}

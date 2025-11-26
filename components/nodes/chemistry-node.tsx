@@ -11,6 +11,7 @@ import { Card } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Info } from "lucide-react"
+import { MapIcon } from "@/components/icons/map-icon"
 import { Spinner } from "@/components/ui/spinner"
 import {
   Dialog,
@@ -37,41 +38,41 @@ const getXYZData = (moleculeKey: string): string => {
 H2 molecule
 H 0.0 0.0 0.0
 H 0.74 0.0 0.0`,
-    
+
     "LiH": `2
 LiH molecule
 Li 0.0 0.0 0.0
 H 1.595 0.0 0.0`,
-    
+
     "BeH2": `3
 BeH2 molecule
 H -1.3264 0.0 0.0
 Be 0.0 0.0 0.0
 H 1.3264 0.0 0.0`,
-    
+
     "H2O": `3
 Water molecule
 O 0.000000 0.000000 0.000000
 H 0.757160 0.586260 0.000000
 H -0.757160 0.586260 0.000000`,
-    
+
     "N2": `2
 Nitrogen molecule
 N 0.0 0.0 0.0
 N 1.0977 0.0 0.0`,
-    
+
     "CO": `2
 Carbon monoxide
 C 0.0 0.0 0.0
 O 1.1283 0.0 0.0`,
-    
+
     "NH3": `4
 Ammonia molecule
 N 0.000000 0.000000 0.000000
 H 0.000000 0.9377 -0.3816
 H 0.8121 -0.4688 -0.3816
 H -0.8121 -0.4688 -0.3816`,
-    
+
     "CH4": `5
 Methane molecule
 C 0.000000 0.000000 0.000000
@@ -79,7 +80,7 @@ H 0.629118 0.629118 0.629118
 H -0.629118 -0.629118 0.629118
 H -0.629118 0.629118 -0.629118
 H 0.629118 -0.629118 -0.629118`,
-    
+
     "Fe2S2": `4
 Iron-sulfur cluster
 Fe 0.000000 0.000000 0.000000
@@ -87,7 +88,7 @@ Fe 2.7 0.000000 0.000000
 S -1.35 2.34 0.000000
 S -1.35 -2.34 0.000000`
   };
-  
+
   return xyzData[moleculeKey] || xyzData["H2"];
 };
 
@@ -372,10 +373,10 @@ export const ChemistryNode = memo(({ id, data, isConnectable }: NodeProps<Chemis
 
   const handleMoleculeChange = (value: string) => {
     setSelectedMolecule(value)
-    
+
     const molecule = molecules[value as keyof typeof molecules]
     const moleculeCode = molecule.pythonTemplate
-    
+
     // Trigger AI code generation by using 'molecule' parameter instead of 'inputCode'
     // This will cause the AI system to generate new code based on the selected molecule
     data.onParameterChange?.(id || '', 'molecule', value)
@@ -391,22 +392,22 @@ export const ChemistryNode = memo(({ id, data, isConnectable }: NodeProps<Chemis
     const maxX = Math.max(...xs)
     const minY = Math.min(...ys)
     const maxY = Math.max(...ys)
-    
+
     const width = maxX - minX
     const height = maxY - minY
     const svgWidth = 208 // Node width (256) - padding (24*2)
     const svgHeight = 120
-    
+
     // Scale to fit in container with some padding
     const scaleX = width > 0 ? (svgWidth - 40) / width : 40
     const scaleY = height > 0 ? (svgHeight - 40) / height : 40
     const scale = Math.min(scaleX, scaleY, 40) // Max scale of 40
-    
+
     const centerX = svgWidth / 2
     const centerY = svgHeight / 2
     const offsetX = (minX + maxX) / 2
     const offsetY = (minY + maxY) / 2
-    
+
     return (
       <div className="bg-white">
         <div className="p-3">
@@ -422,11 +423,11 @@ export const ChemistryNode = memo(({ id, data, isConnectable }: NodeProps<Chemis
           <div className="w-full flex justify-center">
             <svg width={svgWidth} height={svgHeight} className="border border-gray-200 rounded bg-white">
               {/* Bonds - simple lines between atoms */}
-              {currentMolecule.atoms.map((atom1, i) => 
+              {currentMolecule.atoms.map((atom1, i) =>
                 currentMolecule.atoms.slice(i + 1).map((atom2, j) => {
                   const distance = Math.sqrt(
-                    Math.pow(atom1.x - atom2.x, 2) + 
-                    Math.pow(atom1.y - atom2.y, 2) + 
+                    Math.pow(atom1.x - atom2.x, 2) +
+                    Math.pow(atom1.y - atom2.y, 2) +
                     Math.pow(atom1.z - atom2.z, 2)
                   )
                   // Only draw bonds for reasonable distances (< 2.0 Å typically)
@@ -446,7 +447,7 @@ export const ChemistryNode = memo(({ id, data, isConnectable }: NodeProps<Chemis
                   return null
                 })
               )}
-              
+
               {/* Atoms */}
               {currentMolecule.atoms.map((atom, index) => (
                 <g key={`atom-${index}`}>
@@ -472,7 +473,7 @@ export const ChemistryNode = memo(({ id, data, isConnectable }: NodeProps<Chemis
             </svg>
           </div>
         </div>
-        
+
         <div className="bg-white p-2 mx-3 mb-3 rounded text-xs border border-gray-200">
           <div className="font-medium mb-1 text-gray-800">Basis sets:</div>
           <div className="space-y-1 text-gray-700">
@@ -509,17 +510,17 @@ export const ChemistryNode = memo(({ id, data, isConnectable }: NodeProps<Chemis
             </button>
           </div>
           <div className="w-full flex justify-center">
-            <div 
+            <div
               className="border border-gray-200 rounded bg-white relative"
-              style={{ 
+              style={{
                 width: 208, // Same as 2D viewer (svgWidth)
                 height: 120, // Same as 2D viewer (svgHeight)
               }}
             >
-              <div 
+              <div
                 ref={viewerRef}
                 className="absolute inset-0"
-                style={{ 
+                style={{
                   width: '100%',
                   height: '100%',
                   borderRadius: '4px'
@@ -528,7 +529,7 @@ export const ChemistryNode = memo(({ id, data, isConnectable }: NodeProps<Chemis
             </div>
           </div>
         </div>
-        
+
         <div className="bg-white p-2 mx-3 mb-3 rounded text-xs border border-gray-200">
           <div className="font-medium mb-1 text-gray-800">Basis sets:</div>
           <div className="space-y-1 text-gray-700">
@@ -551,12 +552,12 @@ export const ChemistryNode = memo(({ id, data, isConnectable }: NodeProps<Chemis
         try {
           // Dynamic import only on client side
           if (typeof window === 'undefined') return
-          
+
           const $3Dmol = await import('3dmol')
           if (!$3Dmol) return
-          
+
           // Initialize 3Dmol viewer with maximum compatibility config
-          const config = { 
+          const config = {
             backgroundColor: 'white',
             antialias: false,
             preserveDrawingBuffer: false, // Disable to avoid OffscreenCanvas issues
@@ -565,27 +566,27 @@ export const ChemistryNode = memo(({ id, data, isConnectable }: NodeProps<Chemis
             depth: true,
             stencil: false
           };
-          
+
           viewerInstanceRef.current = $3Dmol.createViewer(viewerRef.current, config);
-        
+
           // Load molecule data
           const xyzData = getXYZData(selectedMolecule);
           viewerInstanceRef.current.addModel(xyzData, 'xyz');
-          
+
           // Set visual style - ball and stick representation
           viewerInstanceRef.current.setStyle({}, {
             stick: { radius: 0.15 },
             sphere: { scale: 0.4 }
           });
-          
+
           // Set background and zoom
           viewerInstanceRef.current.setBackgroundColor('white');
           viewerInstanceRef.current.zoomTo();
           viewerInstanceRef.current.zoom(3.0);
-          
+
           // Render the molecule
           viewerInstanceRef.current.render();
-          
+
           // Start a gentle manual rotation using safe rotate method
           let rotationAngle = 0;
           rotationIntervalRef.current = setInterval(() => {
@@ -603,7 +604,7 @@ export const ChemistryNode = memo(({ id, data, isConnectable }: NodeProps<Chemis
               }
             }
           }, 50); // Update every 50ms for smooth animation
-          
+
         } catch (error) {
           console.error('3Dmol initialization error:', error);
           // Fallback: show error message in viewer area
@@ -619,7 +620,7 @@ export const ChemistryNode = memo(({ id, data, isConnectable }: NodeProps<Chemis
           }
         }
       }
-      
+
       init3DMol()
     } else if (!show3D && viewerInstanceRef.current) {
       // Clean up viewer when switching to 2D
@@ -647,24 +648,24 @@ export const ChemistryNode = memo(({ id, data, isConnectable }: NodeProps<Chemis
           clearInterval(rotationIntervalRef.current);
           rotationIntervalRef.current = null;
         }
-        
+
         // Clear existing model
         viewerInstanceRef.current.clear();
-        
+
         // Load new molecule
         const xyzData = getXYZData(selectedMolecule);
         viewerInstanceRef.current.addModel(xyzData, 'xyz');
-        
+
         // Apply styling
         viewerInstanceRef.current.setStyle({}, {
           stick: { radius: 0.15 },
           sphere: { scale: 0.4 }
         });
-        
+
         viewerInstanceRef.current.zoomTo();
         viewerInstanceRef.current.zoom(3.0);
         viewerInstanceRef.current.render();
-        
+
         // Restart rotation animation for new molecule
         let rotationAngle = 0;
         rotationIntervalRef.current = setInterval(() => {
@@ -681,7 +682,7 @@ export const ChemistryNode = memo(({ id, data, isConnectable }: NodeProps<Chemis
             }
           }
         }, 50);
-        
+
       } catch (error) {
         console.error('3Dmol molecule update error:', error);
         // Don't crash, just log the error
@@ -693,7 +694,7 @@ export const ChemistryNode = memo(({ id, data, isConnectable }: NodeProps<Chemis
     <Card className="w-64 border-0 shadow-md rounded-none overflow-hidden bg-white">
       <div className="bg-[#FFEFF7] h-12 flex items-center">
         <div className="w-12 h-12 bg-[#D02771] flex items-center justify-center text-white mr-2">
-          <img src="/node_icons/map.svg" alt="Chemistry" width="24" height="24" className="filter brightness-0 invert" />
+          <MapIcon className="w-6 h-6 text-white" />
         </div>
         <div className="text-sm font-medium text-black flex-1 flex items-center">
           {data.label}
@@ -723,7 +724,7 @@ export const ChemistryNode = memo(({ id, data, isConnectable }: NodeProps<Chemis
           </DialogContent>
         </Dialog>
       </div>
-      
+
       <div className="bg-white">
         <div className="bg-white p-3 border-b border-[#e0e0e0]">
           <div className="text-xs text-[#666] mb-2">Molecular System</div>
@@ -746,40 +747,40 @@ export const ChemistryNode = memo(({ id, data, isConnectable }: NodeProps<Chemis
             </div>
           )}
         </div>
-        
+
         {selectedMolecule && (show3D ? render3DMolecularVisualization() : renderMolecularVisualization())}
       </div>
 
-      <Handle 
-        type="target" 
-        position={Position.Top} 
-        isConnectable={isConnectable} 
-        style={{ 
-          backgroundColor: 'white', 
-          border: '1px solid #D02771', 
-          borderRadius: '50%', 
-          width: '16px', 
-          height: '16px', 
-          display: 'flex', 
-          alignItems: 'center', 
+      <Handle
+        type="target"
+        position={Position.Top}
+        isConnectable={isConnectable}
+        style={{
+          backgroundColor: 'white',
+          border: '1px solid #D02771',
+          borderRadius: '50%',
+          width: '16px',
+          height: '16px',
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
           top: '-20px'
         }}
       >
         <div style={{ backgroundColor: '#D02771', borderRadius: '50%', width: '6px', height: '6px' }} />
       </Handle>
-      <Handle 
-        type="source" 
-        position={Position.Bottom} 
-        isConnectable={isConnectable} 
-        style={{ 
-          backgroundColor: 'white', 
-          border: '1px solid #D02771', 
-          borderRadius: '50%', 
-          width: '16px', 
-          height: '16px', 
-          display: 'flex', 
-          alignItems: 'center', 
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        isConnectable={isConnectable}
+        style={{
+          backgroundColor: 'white',
+          border: '1px solid #D02771',
+          borderRadius: '50%',
+          width: '16px',
+          height: '16px',
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
           bottom: '-20px'
         }}

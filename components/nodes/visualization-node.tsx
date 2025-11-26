@@ -11,6 +11,7 @@ import { Card } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Info, ChevronDown, ChevronUp } from "lucide-react"
+import { PostProcessIcon } from "@/components/icons/post-process-icon"
 import { Spinner } from "@/components/ui/spinner"
 import {
   Dialog,
@@ -45,7 +46,7 @@ export const VisualizationNode = memo(({ id, data, isConnectable }: NodeProps<Vi
 
   const handleVisualizationChange = (value: string) => {
     setSelectedVisualization(value)
-    
+
     const visualizationCode = `visualization_type = "${value}"
 if visualization_type == "Undirected Graph":
     from qiskit.visualization import plot_state_city
@@ -78,7 +79,7 @@ elif visualization_type == "Raw":
     print("Raw results:", counts)
 else:
     print("Unknown visualization type")`
-    
+
     data.onInputChange?.(id || '', visualizationCode)
     data.onParameterChange?.(id || '', 'visualization_type', value)
   }
@@ -103,7 +104,7 @@ else:
         if (parsed.nodes && parsed.edges && parsed.bitstring) {
           return parsed
         }
-        
+
         // Fallback: try to parse if it contains legacy bitstring format
         if (data.defaultText.includes('bitstring') || data.defaultText.includes('Result bitstring')) {
           const bitstringMatch = data.defaultText.match(/\[([0-9, ]+)\]/)
@@ -111,7 +112,7 @@ else:
             const bitstring = bitstringMatch[1].split(',').map(s => parseInt(s.trim()))
             return {
               nodes: 5,
-              edges: [[0,1], [0,2], [0,4], [1,2], [2,3], [3,4]], // Fallback edges
+              edges: [[0, 1], [0, 2], [0, 4], [1, 2], [2, 3], [3, 4]], // Fallback edges
               bitstring
             }
           }
@@ -140,7 +141,7 @@ else:
     const marginBottom = 25
     const marginTop = 10
     const marginRight = 10
-    
+
     const plotWidth = containerWidth - marginLeft - marginRight
     const plotHeight = containerHeight - marginTop - marginBottom
 
@@ -153,7 +154,7 @@ else:
     }
 
     const createPath = (values: number[]) => {
-      return values.map((val, i) => 
+      return values.map((val, i) =>
         `${i === 0 ? 'M' : 'L'} ${getX(i, values.length)} ${getY(val)}`
       ).join(' ')
     }
@@ -172,106 +173,106 @@ else:
       <div className="w-full flex flex-col items-center">
         <svg width={containerWidth} height={containerHeight} className="border border-gray-200">
           {/* Plot area background */}
-          <rect x={marginLeft} y={marginTop} width={plotWidth} height={plotHeight} 
-                fill="white" stroke="none"/>
-          
+          <rect x={marginLeft} y={marginTop} width={plotWidth} height={plotHeight}
+            fill="white" stroke="none" />
+
           {/* Grid lines */}
           {yTicks.map((tick, i) => (
-            <line key={`h-${i}`} 
-                  x1={marginLeft} 
-                  y1={getY(tick)} 
-                  x2={marginLeft + plotWidth} 
-                  y2={getY(tick)} 
-                  stroke="#e0e0e0" 
-                  strokeWidth="0.5"/>
+            <line key={`h-${i}`}
+              x1={marginLeft}
+              y1={getY(tick)}
+              x2={marginLeft + plotWidth}
+              y2={getY(tick)}
+              stroke="#e0e0e0"
+              strokeWidth="0.5" />
           ))}
           {xTicks.map((tick, i) => (
-            <line key={`v-${i}`} 
-                  x1={getX(tick, plotData.CHSH1.length)} 
-                  y1={marginTop} 
-                  x2={getX(tick, plotData.CHSH1.length)} 
-                  y2={marginTop + plotHeight} 
-                  stroke="#e0e0e0" 
-                  strokeWidth="0.5"/>
+            <line key={`v-${i}`}
+              x1={getX(tick, plotData.CHSH1.length)}
+              y1={marginTop}
+              x2={getX(tick, plotData.CHSH1.length)}
+              y2={marginTop + plotHeight}
+              stroke="#e0e0e0"
+              strokeWidth="0.5" />
           ))}
-          
+
           {/* Axes */}
-          <line x1={marginLeft} y1={marginTop} x2={marginLeft} y2={marginTop + plotHeight} 
-                stroke="#333" strokeWidth="1"/>
-          <line x1={marginLeft} y1={marginTop + plotHeight} x2={marginLeft + plotWidth} y2={marginTop + plotHeight} 
-                stroke="#333" strokeWidth="1"/>
-          
+          <line x1={marginLeft} y1={marginTop} x2={marginLeft} y2={marginTop + plotHeight}
+            stroke="#333" strokeWidth="1" />
+          <line x1={marginLeft} y1={marginTop + plotHeight} x2={marginLeft + plotWidth} y2={marginTop + plotHeight}
+            stroke="#333" strokeWidth="1" />
+
           {/* CHSH1 line */}
-          <path d={createPath(plotData.CHSH1)} 
-                fill="none" 
-                stroke="#2563EB" 
-                strokeWidth="2"/>
-          
+          <path d={createPath(plotData.CHSH1)}
+            fill="none"
+            stroke="#2563EB"
+            strokeWidth="2" />
+
           {/* CHSH2 line */}
-          <path d={createPath(plotData.CHSH2)} 
-                fill="none" 
-                stroke="#DC2626" 
-                strokeWidth="2"/>
-          
+          <path d={createPath(plotData.CHSH2)}
+            fill="none"
+            stroke="#DC2626"
+            strokeWidth="2" />
+
           {/* Data points */}
           {plotData.CHSH1.map((val: number, i: number) => (
-            <circle key={`chsh1-${i}`} 
-                    cx={getX(i, plotData.CHSH1.length)} 
-                    cy={getY(val)} 
-                    r="1.5" 
-                    fill="#2563EB"/>
+            <circle key={`chsh1-${i}`}
+              cx={getX(i, plotData.CHSH1.length)}
+              cy={getY(val)}
+              r="1.5"
+              fill="#2563EB" />
           ))}
           {plotData.CHSH2.map((val: number, i: number) => (
-            <circle key={`chsh2-${i}`} 
-                    cx={getX(i, plotData.CHSH2.length)} 
-                    cy={getY(val)} 
-                    r="1.5" 
-                    fill="#DC2626"/>
+            <circle key={`chsh2-${i}`}
+              cx={getX(i, plotData.CHSH2.length)}
+              cy={getY(val)}
+              r="1.5"
+              fill="#DC2626" />
           ))}
-          
+
           {/* Y-axis labels */}
           {yTicks.map((tick, i) => (
-            <text key={`y-label-${i}`} 
-                  x={marginLeft - 5} 
-                  y={getY(tick) + 3} 
-                  textAnchor="end" 
-                  fontSize="8" 
-                  fill="#666">
+            <text key={`y-label-${i}`}
+              x={marginLeft - 5}
+              y={getY(tick) + 3}
+              textAnchor="end"
+              fontSize="8"
+              fill="#666">
               {tick.toFixed(1)}
             </text>
           ))}
-          
+
           {/* X-axis labels */}
           {xTicks.map((tick, i) => (
-            <text key={`x-label-${i}`} 
-                  x={getX(tick, plotData.CHSH1.length)} 
-                  y={marginTop + plotHeight + 15} 
-                  textAnchor="middle" 
-                  fontSize="8" 
-                  fill="#666">
+            <text key={`x-label-${i}`}
+              x={getX(tick, plotData.CHSH1.length)}
+              y={marginTop + plotHeight + 15}
+              textAnchor="middle"
+              fontSize="8"
+              fill="#666">
               {tick}
             </text>
           ))}
-          
+
           {/* Axis titles */}
-          <text x={marginLeft + plotWidth / 2} 
-                y={containerHeight - 5} 
-                textAnchor="middle" 
-                fontSize="9" 
-                fill="#333">
+          <text x={marginLeft + plotWidth / 2}
+            y={containerHeight - 5}
+            textAnchor="middle"
+            fontSize="9"
+            fill="#333">
             Phase Index
           </text>
-          
-          <text x={12} 
-                y={marginTop + plotHeight / 2} 
-                textAnchor="middle" 
-                fontSize="9" 
-                fill="#333" 
-                transform={`rotate(-90, 12, ${marginTop + plotHeight / 2})`}>
+
+          <text x={12}
+            y={marginTop + plotHeight / 2}
+            textAnchor="middle"
+            fontSize="9"
+            fill="#333"
+            transform={`rotate(-90, 12, ${marginTop + plotHeight / 2})`}>
             CHSH Value
           </text>
         </svg>
-        
+
         {/* Legend */}
         <div className="flex gap-3 mt-1 text-xs">
           <div className="flex items-center gap-1">
@@ -315,44 +316,44 @@ else:
             const [node1, node2] = edge
             const pos1 = nodePositions[node1]
             const pos2 = nodePositions[node2]
-            
+
             // All edges are gray and thick
             const edgeColor = "#6B7280" // Gray for all edges
             const edgeWidth = "3" // Thick for all edges
-            
+
             return (
               <line key={`edge-${i}`}
-                    x1={pos1.x} y1={pos1.y}
-                    x2={pos2.x} y2={pos2.y}
-                    stroke={edgeColor}
-                    strokeWidth={edgeWidth}
-                    opacity={1} />
+                x1={pos1.x} y1={pos1.y}
+                x2={pos2.x} y2={pos2.y}
+                stroke={edgeColor}
+                strokeWidth={edgeWidth}
+                opacity={1} />
             )
           })}
-          
+
           {/* Draw nodes */}
           {nodePositions.map((pos, i) => {
             const partition = graphData.bitstring[i]
             const nodeColor = partition === 0 ? "#EF4444" : "#3B82F6" // Red for 0, Blue for 1
-            
+
             return (
               <g key={`node-${i}`}>
                 <circle cx={pos.x} cy={pos.y} r="15"
-                        fill={nodeColor}
-                        stroke="#fff"
-                        strokeWidth="2" />
+                  fill={nodeColor}
+                  stroke="#fff"
+                  strokeWidth="2" />
                 <text x={pos.x} y={pos.y + 4}
-                      textAnchor="middle"
-                      fontSize="12"
-                      fill="white"
-                      fontWeight="bold">
+                  textAnchor="middle"
+                  fontSize="12"
+                  fill="white"
+                  fontWeight="bold">
                   {i}
                 </text>
               </g>
             )
           })}
         </svg>
-        
+
         {/* Legend */}
         <div className="flex flex-col gap-1 mt-2 text-xs">
           <div className="flex gap-4">
@@ -381,7 +382,7 @@ else:
     if (data.defaultText) {
       return data.defaultText;
     }
-    
+
     switch (selectedVisualization) {
       case "Undirected Graph":
         return "Graph visualization will appear here"
@@ -410,7 +411,7 @@ else:
     <Card className="w-64 border-0 shadow-md rounded-none overflow-hidden">
       <div className="bg-[#DDFBE5] h-12 flex items-center">
         <div className="w-12 h-12 bg-[#1A8038] flex items-center justify-center text-white mr-2">
-          <img src="/node_icons/custom-output.svg" alt="Output" width="24" height="24" className="filter brightness-0 invert" />
+          <PostProcessIcon className="w-6 h-6 text-white" />
         </div>
         <div className="text-sm font-medium text-black flex-1 flex items-center">
           {data.label}
@@ -464,7 +465,7 @@ else:
         </div>
         {selectedVisualization && (
           <div className="bg-white">
-            <div 
+            <div
               className="flex items-center justify-between p-3 cursor-pointer hover:bg-gray-50"
               onClick={() => setIsResultCollapsed(!isResultCollapsed)}
             >
@@ -495,18 +496,18 @@ else:
           </div>
         )}
       </div>
-      <Handle 
-        type="target" 
-        position={Position.Top} 
-        isConnectable={isConnectable} 
-        style={{ 
-          backgroundColor: 'white', 
-          border: '1px solid #1A8038', 
-          borderRadius: '50%', 
-          width: '16px', 
-          height: '16px', 
-          display: 'flex', 
-          alignItems: 'center', 
+      <Handle
+        type="target"
+        position={Position.Top}
+        isConnectable={isConnectable}
+        style={{
+          backgroundColor: 'white',
+          border: '1px solid #1A8038',
+          borderRadius: '50%',
+          width: '16px',
+          height: '16px',
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
           top: '-20px'
         }}
