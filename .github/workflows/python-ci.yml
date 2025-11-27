@@ -1,0 +1,108 @@
+name: Python CI
+
+on:
+    pull_request:
+        paths:
+            - "api/**"
+            - ".github/workflows/python-backend-ci.yaml"
+            - ".secrets.baseline"
+    push:
+        branches: [main]
+
+jobs:
+    lint:
+        name: Lint
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v6
+
+            - name: Install uv
+              uses: astral-sh/setup-uv@v5
+              with:
+                  python-version: "3.13"
+                  enable-cache: true
+
+            - name: Set up Python
+              run: uv python install
+
+            - name: Install linting tools (CI only)
+              run: uv pip install black flake8 mypy detect-secrets
+
+            - name: Black
+              run: uv run black --check api
+
+            - name: Flake8
+              run: uv run flake8 api
+
+            - name: Mypy
+              run: uv run mypy api
+
+            - name: Detect Secrets
+              run: |
+                  uv run detect-secrets-hook \
+                    --baseline .secrets.baseline \
+                    --use-all-plugins
+
+    test:
+        name: Tests (Python ${{ matrix.python-version }})
+        runs-on: ubuntu-latest
+        needs: lint
+
+        strategy:
+            fail-fast: false
+            matrix:
+                python-version: ["3.11", "3.12", "3.13"]
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Install uv
+              uses: astral-sh/setup-uv@v3
+              with:
+                  python-version: ${{ matrix.python-version }}
+                  enable-cache: true
+
+            - name: Install test tools (CI only)
+              run: uv pip install pytest
+
+            # --------------------------------------------------------
+            # CHAT AGENT (>= 3.11)
+            # --------------------------------------------------------
+            - name: Install Chat Agent
+              working-directory: api/chat-agent
+              run: uv sync --all-groups
+
+            - name: Test Chat Agent
+              working-directory: api/chat-agent
+              run: uv run pytest -q
+
+            # --------------------------------------------------------
+            # CODEGEN AGENT (>= 3.11)
+            # --------------------------------------------------------
+            - name: Install Codegen Agent
+              working-directory: api/codegen-agent
+              run: uv sync --all-groups
+
+            - name: Test Codegen Agent
+              working-directory: api/codegen-agent
+              run: uv run pytest -q
+
+            # --------------------------------------------------------
+            # CODERUN AGENT (>= 3.12)
+            # --------------------------------------------------------
+            - name: Skip coderun-agent on Python <3.12
+              if: matrix.python-version == '3.11'
+              run: echo "Skipping coderun-agent for Python ${{ matrix.python-version }}"
+
+            - name: Install Coderun Agent
+              if: matrix.python-version != '3.11'
+              working-directory: api/coderun-agent
+              run: uv sync --all-groups
+
+            - name: Test Coderun Agent
+              if: matrix.python-version != '3.11'
+              working-directory: api/coderun-agent
+              run: uv run pytest -q
