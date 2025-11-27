@@ -4,7 +4,7 @@ on:
   pull_request:
     paths:
       - "api/**"
-      - ".github/workflows/python-backend-ci.yaml"
+      - ".github/workflows/python-ci.yml"
       - ".secrets.baseline"
   push:
     branches: [main]
