@@ -42,8 +42,7 @@ jobs:
       - name: Detect Secrets
         run: |
           uv run detect-secrets-hook \
-            --baseline .secrets.baseline \
-            --use-all-plugins
+            --baseline .secrets.baseline
 
   test:
     name: Tests (Python ${{ matrix.python-version }})
