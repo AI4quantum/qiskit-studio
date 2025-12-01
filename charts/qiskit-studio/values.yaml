@@ -251,7 +251,16 @@ knowledgePreloaderJob:
 maestro:
   logLevel: INFO
 
-# Ingress configuration
+# OpenShift Route configuration (disabled by default)
+route:
+  enabled: false
+  type: "openshift"
+  domain: "apps.example.com"  # Base domain for route generation
+  host: ""  # Leave empty to use default: <release-name>.<namespace>.<domain>
+  timeout: "120s"
+  annotations: {}
+
+# Ingress configuration (disabled by default)
 ingress:
   enabled: false
   className: ""

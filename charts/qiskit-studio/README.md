@@ -126,6 +126,43 @@ helm uninstall qiskit-studio-local
 
 ## Deployment Scenarios
 
+### OpenShift Deployment with Routes
+
+For OpenShift clusters, the chart supports native OpenShift Routes instead of Kubernetes Ingress. Routes provide automatic TLS termination and integrate with OpenShift's built-in router.
+
+**Example: Deploying to Research@IBM OpenShift cluster**
+
+```bash
+helm install qiskit-studio charts/qiskit-studio \
+  -n qiskitstudio \
+  -f charts/qiskit-studio/values-openshift-research.yaml
+```
+
+This configuration:
+- Enables OpenShift Routes (`route.enabled: true`)
+- Disables Kubernetes Ingress
+- Creates routes with automatic hostname generation: `<service>.<release-name>.<namespace>.<domain>`
+- Configures edge TLS termination with automatic certificates
+- Sets appropriate resource limits for OpenShift LimitRange policies
+
+**Accessing the application:**
+- Frontend: `https://qiskit-studio.qiskitstudio.apps.example.com`
+- Chat API: `https://chat.qiskit-studio.qiskitstudio.apps.example.com`
+- Codegen API: `https://codegen.qiskit-studio.qiskitstudio.apps.example.com`
+- Coderun API: `https://coderun.qiskit-studio.qiskitstudio.apps.example.com`
+
+**Custom route hostname:**
+
+To use a custom hostname instead of the auto-generated one:
+
+```yaml
+route:
+  enabled: true
+  type: "openshift"
+  domain: "apps.example.com"
+  host: "my-custom-hostname.apps.example.com"  # Optional: override auto-generated hostname
+```
+
 ### Local Deployment (Default)
 
 The Quick Start guide above uses the `values-local.yaml` file, which is the recommended method for local development. This configuration disables Ingress and exposes services via `NodePort` for easy access on your local machine.
@@ -209,7 +246,11 @@ This table lists the parameters that you are most likely to configure for both l
 | `codegen.image.tag` | The codegen image tag. | `0.5.0` |
 | `coderun.image.repository` | The coderun image repository. | `coderun-agent` |
 | `coderun.image.tag` | The coderun image tag. | `v0.0.3` |
-| `ingress.enabled` | Whether to enable ingress. | `false` |
+| `route.enabled` | Whether to enable OpenShift Routes. | `false` |
+| `route.type` | Route type (`openshift` for OpenShift Routes). | `"openshift"` |
+| `route.host` | Custom route hostname (leave empty for auto-generated). | `""` |
+| `route.timeout` | HAProxy timeout for routes. | `"120s"` |
+| `ingress.enabled` | Whether to enable Kubernetes Ingress. | `false` |
 | `ingress.host` | The ingress host. (Configured in `values-cloud.yaml`) | `agents.experimental.quantum.ibm.com` |
 | `extraEnvVars` | A list of additional environment variables to be added to all pods. | `[]` |
 

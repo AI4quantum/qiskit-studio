@@ -1,0 +1,59 @@
+# Helm values for deploying to a local Kubernetes cluster with LM Studio
+
+global:
+  hostname: "127.0.0.1"
+  llm:
+    chat:
+      # LM Studio runs on port 1234 by default
+      baseUrl: http://host.docker.internal:1234/v1
+      # Using granite4 tiny for chat
+      model: "ibm/granite-4-h-tiny"
+      secret:
+        create: true
+        name: local-llm-secret
+        key: apiKey
+        value: "dummy"
+    embedding:
+      # LM Studio embedding endpoint
+      baseUrl: http://host.docker.internal:1234/v1
+      # Using nomic v2 for embeddings
+      model: "text-embedding-nomic-embed-text-v2"
+      vectorSize: "768"
+      secret:
+        create: true
+        name: local-llm-secret
+        key: apiKey
+        value: "dummy"
+  # No image pull secrets needed for public images
+  imagePullSecrets:
+    name: null
+
+frontend:
+  service:
+    type: NodePort
+    port: 3000
+    nodePort: 30000
+
+chat:
+  service:
+    type: NodePort
+    port: 8000
+    nodePort: 30001
+
+codegen:
+  service:
+    type: NodePort
+    port: 8000
+    nodePort: 30002
+
+coderun:
+  service:
+    type: NodePort
+    port: 8000
+    nodePort: 30003
+
+# Debug logging for local development
+maestro:
+  logLevel: DEBUG
+
+# Made with Bob

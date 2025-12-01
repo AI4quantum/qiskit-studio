@@ -62,8 +62,15 @@ spec:
             readOnly: true
       {{- end }}
       - name: wait-for-milvus
-        image: busybox:1.37 # A small image with basic networking tools
-        command: ['sh', '-c', 'until nc -z {{ .Release.Name }}-milvus-service {{ .Values.milvus.service.httpPort }}; do echo waiting for milvus; sleep 2; done;']
+        image: registry.access.redhat.com/ubi9/ubi-minimal:latest
+        command:
+          - bash
+          - -c
+          - |
+            until timeout 1 bash -c "cat < /dev/null > /dev/tcp/{{ .Release.Name }}-milvus-service/{{ .Values.milvus.service.httpPort }}"; do
+              echo waiting for milvus
+              sleep 2
+            done
       volumes:
         - name: vllm-embedding-api-key-volume
           secret:
