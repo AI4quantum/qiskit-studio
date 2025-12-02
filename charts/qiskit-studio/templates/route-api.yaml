@@ -15,7 +15,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
 {{- end }}
 spec:
-  host: {{ printf "chat.%s.%s.%s" .Release.Name .Release.Namespace .Values.route.domain }}
+  host: {{ .Values.chat.route.host | default (printf "%s.%s.%s" .Values.chat.route.name .Release.Namespace .Values.route.domain) }}
   path: /
   port:
     targetPort: {{ .Values.chat.service.port }}
@@ -43,7 +43,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
 {{- end }}
 spec:
-  host: {{ printf "codegen.%s.%s.%s" .Release.Name .Release.Namespace .Values.route.domain }}
+  host: {{ .Values.codegen.route.host | default (printf "%s.%s.%s" .Values.codegen.route.name .Release.Namespace .Values.route.domain) }}
   path: /
   port:
     targetPort: {{ .Values.codegen.service.port }}
@@ -71,7 +71,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
 {{- end }}
 spec:
-  host: {{ printf "coderun.%s.%s.%s" .Release.Name .Release.Namespace .Values.route.domain }}
+  host: {{ .Values.coderun.route.host | default (printf "%s.%s.%s" .Values.coderun.route.name .Release.Namespace .Values.route.domain) }}
   path: /
   port:
     targetPort: {{ .Values.coderun.service.port }}

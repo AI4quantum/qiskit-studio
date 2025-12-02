@@ -69,6 +69,9 @@ frontend:
     type: NodePort
     port: 3000
   serviceAccountName: default
+  route:
+    name: "frontend"  # Route name component, results in: <name>.<namespace>.<domain>
+    host: ""  # Leave empty to use default based on route.name
   resources:
     requests:
       cpu: "100m"
@@ -95,6 +98,9 @@ chat:
     port: 8000
     nodePort: null
   serviceAccountName: default
+  route:
+    name: "chat"  # Route name component, results in: <name>.<namespace>.<domain>
+    host: ""  # Leave empty to use default based on route.name
   resources:
     requests:
       cpu: "250m"
@@ -121,6 +127,9 @@ codegen:
     port: 8000
     nodePort: null
   serviceAccountName: default
+  route:
+    name: "codegen"  # Route name component, results in: <name>.<namespace>.<domain>
+    host: ""  # Leave empty to use default based on route.name
   resources:
     requests:
       cpu: "250m"
@@ -180,6 +189,9 @@ coderun:
     port: 8000
     nodePort: null
   serviceAccountName: default
+  route:
+    name: "coderun"  # Route name component, results in: <name>.<namespace>.<domain>
+    host: ""  # Leave empty to use default based on route.name
   resources:
     requests:
       cpu: "100m"

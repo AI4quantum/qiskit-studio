@@ -135,32 +135,38 @@ For OpenShift clusters, the chart supports native OpenShift Routes instead of Ku
 ```bash
 helm install qiskit-studio charts/qiskit-studio \
   -n qiskitstudio \
-  -f charts/qiskit-studio/values-openshift-research.yaml
+  -f charts/qiskit-studio/values-openshift-research.yaml \
+  --disable-openapi-validation
 ```
+
+**Note:** The `--disable-openapi-validation` flag is required **only when using OpenShift Routes**. While Helm can validate OpenShift CRDs, validation often fails due to schema inconsistencies between the chart and OpenShift's API server (e.g., field type mismatches, stale cached schemas, or strict enforcement of deprecated fields). This flag skips Helm's client-side validation, allowing the manifests to be sent directly to OpenShift where the admission controller performs the authoritative validation. This flag is not needed for standard Kubernetes Ingress deployments.
 
 This configuration:
 - Enables OpenShift Routes (`route.enabled: true`)
 - Disables Kubernetes Ingress
-- Creates routes with automatic hostname generation: `<service>.<release-name>.<namespace>.<domain>`
+- Creates routes with automatic hostname generation: `<service-name>.<namespace>.<domain>`
 - Configures edge TLS termination with automatic certificates
 - Sets appropriate resource limits for OpenShift LimitRange policies
 
 **Accessing the application:**
-- Frontend: `https://qiskit-studio.qiskitstudio.apps.example.com`
-- Chat API: `https://chat.qiskit-studio.qiskitstudio.apps.example.com`
-- Codegen API: `https://codegen.qiskit-studio.qiskitstudio.apps.example.com`
-- Coderun API: `https://coderun.qiskit-studio.qiskitstudio.apps.example.com`
+- Frontend: `https://frontend.qiskitstudio.vpc-int.res.ibm.com`
+- Chat API: `https://chat.qiskitstudio.vpc-int.res.ibm.com`
+- Codegen API: `https://codegen.qiskitstudio.vpc-int.res.ibm.com`
+- Coderun API: `https://coderun.qiskitstudio.vpc-int.res.ibm.com`
 
-**Custom route hostname:**
+**Route Configuration:**
 
-To use a custom hostname instead of the auto-generated one:
+Routes are automatically generated using the pattern: `<service-name>.<namespace>.<domain>`
+
+Default service names are: `frontend`, `chat`, `codegen`, `coderun`
+
+To customize route names or hostnames for a specific service:
 
 ```yaml
-route:
-  enabled: true
-  type: "openshift"
-  domain: "apps.example.com"
-  host: "my-custom-hostname.apps.example.com"  # Optional: override auto-generated hostname
+frontend:
+  route:
+    name: "studio"  # Changes route to: studio.qiskitstudio.vpc-int.res.ibm.com
+    host: "my-custom-hostname.vpc-int.res.ibm.com"  # Or override hostname completely
 ```
 
 ### Local Deployment (Default)

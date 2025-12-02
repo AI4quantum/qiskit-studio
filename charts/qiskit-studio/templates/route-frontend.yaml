@@ -14,7 +14,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
 {{- end }}
 spec:
-  host: {{ .Values.route.host | default (printf "%s.%s.%s" .Release.Name .Release.Namespace .Values.route.domain) }}
+  host: {{ .Values.frontend.route.host | default (printf "%s.%s.%s" .Values.frontend.route.name .Release.Namespace .Values.route.domain) }}
   port:
     targetPort: {{ .Values.frontend.service.port }}
   tls:
