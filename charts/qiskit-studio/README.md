@@ -130,7 +130,7 @@ helm uninstall qiskit-studio-local
 
 For OpenShift clusters, the chart supports native OpenShift Routes instead of Kubernetes Ingress. Routes provide automatic TLS termination and integrate with OpenShift's built-in router.
 
-**Example: Deploying to Research@IBM OpenShift cluster**
+**Example: Deploying to OpenShift cluster**
 
 ```bash
 helm install qiskit-studio charts/qiskit-studio \
@@ -149,10 +149,10 @@ This configuration:
 - Sets appropriate resource limits for OpenShift LimitRange policies
 
 **Accessing the application:**
-- Frontend: `https://frontend.qiskitstudio.vpc-int.res.ibm.com`
-- Chat API: `https://chat.qiskitstudio.vpc-int.res.ibm.com`
-- Codegen API: `https://codegen.qiskitstudio.vpc-int.res.ibm.com`
-- Coderun API: `https://coderun.qiskitstudio.vpc-int.res.ibm.com`
+- Frontend: `https://frontend.qiskitstudio.example.com`
+- Chat API: `https://chat.qiskitstudio.example.com`
+- Codegen API: `https://codegen.qiskitstudio.example.com`
+- Coderun API: `https://coderun.qiskitstudio.example.com`
 
 **Route Configuration:**
 
@@ -165,8 +165,8 @@ To customize route names or hostnames for a specific service:
 ```yaml
 frontend:
   route:
-    name: "studio"  # Changes route to: studio.qiskitstudio.vpc-int.res.ibm.com
-    host: "my-custom-hostname.vpc-int.res.ibm.com"  # Or override hostname completely
+    name: "studio"  # Changes route to: studio.qiskitstudio.example.com
+    host: "my-custom-hostname.example.com"  # Or override hostname completely
 ```
 
 ### Local Deployment (Default)
