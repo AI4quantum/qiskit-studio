@@ -69,13 +69,22 @@ frontend:
     type: NodePort
     port: 3000
   serviceAccountName: default
+  route:
+    name: "frontend"  # Route name component, results in: <name>.<namespace>.<domain>
+    host: ""  # Leave empty to use default based on route.name
   resources:
     requests:
-      cpu: "100m"
-      memory: "128Mi"
-    limits:
       cpu: "200m"
-      memory: "256Mi"
+      memory: "1Gi"
+    limits:
+      cpu: "2000m"  # 2 CPU cores for faster compilation
+      memory: "1536Mi"  # 1.5Gi
+  # Startup probe configuration for frontend
+  startupProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 30  # 30 * 10s = 5 minutes total startup time
   # A list of additional environment variables to be added to the frontend pod.
   # For example:
   # extraEnvVars:
@@ -95,12 +104,15 @@ chat:
     port: 8000
     nodePort: null
   serviceAccountName: default
+  route:
+    name: "chat"  # Route name component, results in: <name>.<namespace>.<domain>
+    host: ""  # Leave empty to use default based on route.name
   resources:
     requests:
-      cpu: "250m"
+      cpu: "200m"
       memory: "512Mi"
     limits:
-      cpu: "500m"
+      cpu: "1000m"  # AI chat needs CPU for inference
       memory: "1Gi"
   # A list of additional environment variables to be added to the chat pod.
   # For example:
@@ -121,12 +133,15 @@ codegen:
     port: 8000
     nodePort: null
   serviceAccountName: default
+  route:
+    name: "codegen"  # Route name component, results in: <name>.<namespace>.<domain>
+    host: ""  # Leave empty to use default based on route.name
   resources:
     requests:
-      cpu: "250m"
+      cpu: "200m"
       memory: "512Mi"
     limits:
-      cpu: "500m"
+      cpu: "1000m"  # Code generation is CPU-intensive
       memory: "1Gi"
   # A list of additional environment variables to be added to the codegen pod.
   # For example:
@@ -148,10 +163,10 @@ knowledgeMcp:
   serviceAccountName: default
   resources:
     requests:
-      cpu: "250m"
+      cpu: "200m"
       memory: "512Mi"
     limits:
-      cpu: "500m"
+      cpu: "1000m"  # Vector DB operations need decent CPU
       memory: "1Gi"
   readinessProbe:
     initialDelaySeconds: 20
@@ -180,13 +195,16 @@ coderun:
     port: 8000
     nodePort: null
   serviceAccountName: default
+  route:
+    name: "coderun"  # Route name component, results in: <name>.<namespace>.<domain>
+    host: ""  # Leave empty to use default based on route.name
   resources:
     requests:
-      cpu: "100m"
-      memory: "128Mi"
-    limits:
       cpu: "200m"
-      memory: "256Mi"
+      memory: "512Mi"
+    limits:
+      cpu: "2000m"  # Python/Qiskit execution needs resources
+      memory: "2Gi"  # Qiskit requires significant memory
   # A list of additional environment variables to be added to the coderun pod.
   # For example:
   # extraEnvVars:
@@ -206,6 +224,13 @@ milvus:
     grpcPort: 19530
     httpPort: 9091
   serviceAccountName: default
+  resources:
+    requests:
+      cpu: "200m"
+      memory: "512Mi"
+    limits:
+      cpu: "1000m"  # Vector database needs CPU for indexing
+      memory: "1Gi"  # Vector storage requires memory
 
   # A list of additional environment variables to be added to the milvus pod.
   # For example:
@@ -227,11 +252,11 @@ knowledgePreloaderJob:
   serviceAccountName: default
   resources:
     requests:
-      memory: "1Gi"
-      cpu: "500m"
+      memory: "512Mi"
+      cpu: "200m"
     limits:
-      memory: "2Gi"
-      cpu: "1"
+      memory: "768Mi"  # 0.75Gi
+      cpu: "1000m"
   # A list of additional environment variables to be added to the knowledge-preloader-job pod.
   # For example:
   # extraEnvVars:
@@ -251,7 +276,16 @@ knowledgePreloaderJob:
 maestro:
   logLevel: INFO
 
-# Ingress configuration
+# OpenShift Route configuration (disabled by default)
+route:
+  enabled: false
+  type: "openshift"
+  domain: "apps.example.com"  # Base domain for route generation
+  host: ""  # Leave empty to use default: <release-name>.<namespace>.<domain>
+  timeout: "120s"
+  annotations: {}
+
+# Ingress configuration (disabled by default)
 ingress:
   enabled: false
   className: ""

@@ -1,0 +1,88 @@
+{{- if and .Values.route.enabled (eq .Values.route.type "openshift") }}
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ .Release.Name }}-chat
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "qiskit-studio.labels" . | nindent 4 }}
+    app.kubernetes.io/component: chat
+    ingress: {{ .Release.Namespace }}
+  annotations:
+    haproxy.router.openshift.io/timeout: {{ .Values.route.timeout | default "120s" }}
+{{- with .Values.route.annotations }}
+    {{- toYaml . | nindent 4 }}
+{{- end }}
+spec:
+  host: {{ .Values.chat.route.host | default (printf "%s.%s.%s" .Values.chat.route.name .Release.Namespace .Values.route.domain) }}
+  path: /
+  port:
+    targetPort: {{ .Values.chat.service.port }}
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: {{ .Release.Name }}-chat
+    weight: 100
+  wildcardPolicy: None
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ .Release.Name }}-codegen
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "qiskit-studio.labels" . | nindent 4 }}
+    app.kubernetes.io/component: codegen
+    ingress: {{ .Release.Namespace }}
+  annotations:
+    haproxy.router.openshift.io/timeout: {{ .Values.route.timeout | default "120s" }}
+{{- with .Values.route.annotations }}
+    {{- toYaml . | nindent 4 }}
+{{- end }}
+spec:
+  host: {{ .Values.codegen.route.host | default (printf "%s.%s.%s" .Values.codegen.route.name .Release.Namespace .Values.route.domain) }}
+  path: /
+  port:
+    targetPort: {{ .Values.codegen.service.port }}
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: {{ .Release.Name }}-codegen
+    weight: 100
+  wildcardPolicy: None
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ .Release.Name }}-coderun
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "qiskit-studio.labels" . | nindent 4 }}
+    app.kubernetes.io/component: coderun
+    ingress: {{ .Release.Namespace }}
+  annotations:
+    haproxy.router.openshift.io/timeout: {{ .Values.route.timeout | default "120s" }}
+{{- with .Values.route.annotations }}
+    {{- toYaml . | nindent 4 }}
+{{- end }}
+spec:
+  host: {{ .Values.coderun.route.host | default (printf "%s.%s.%s" .Values.coderun.route.name .Release.Namespace .Values.route.domain) }}
+  path: /
+  port:
+    targetPort: {{ .Values.coderun.service.port }}
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: {{ .Release.Name }}-coderun
+    weight: 100
+  wildcardPolicy: None
+{{- end }}
+
+# Made with Bob

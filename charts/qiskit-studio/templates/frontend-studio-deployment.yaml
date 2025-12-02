@@ -19,14 +19,14 @@ spec:
       serviceAccountName: {{ .Values.frontend.serviceAccountName }}
       initContainers:
       - name: wait-for-chat
-        image: busybox:1.37
-        command: ['sh', '-c', 'until nc -z {{ .Release.Name }}-chat {{ .Values.chat.service.port }}; do echo waiting for chat service; sleep 2; done;']
+        image: registry.access.redhat.com/ubi9/ubi-minimal:latest
+        command: ['/bin/bash', '-c', 'until (echo > /dev/tcp/{{ .Release.Name }}-chat/{{ .Values.chat.service.port }}) >/dev/null 2>&1; do echo waiting for chat service; sleep 2; done;']
       - name: wait-for-codegen
-        image: busybox:1.37
-        command: ['sh', '-c', 'until nc -z {{ .Release.Name }}-codegen {{ .Values.codegen.service.port }}; do echo waiting for codegen service; sleep 2; done;']
+        image: registry.access.redhat.com/ubi9/ubi-minimal:latest
+        command: ['/bin/bash', '-c', 'until (echo > /dev/tcp/{{ .Release.Name }}-codegen/{{ .Values.codegen.service.port }}) >/dev/null 2>&1; do echo waiting for codegen service; sleep 2; done;']
       - name: wait-for-coderun
-        image: busybox:1.37
-        command: ['sh', '-c', 'until nc -z {{ .Release.Name }}-coderun {{ .Values.coderun.service.port }}; do echo waiting for coderun service; sleep 2; done;']
+        image: registry.access.redhat.com/ubi9/ubi-minimal:latest
+        command: ['/bin/bash', '-c', 'until (echo > /dev/tcp/{{ .Release.Name }}-coderun/{{ .Values.coderun.service.port }}) >/dev/null 2>&1; do echo waiting for coderun service; sleep 2; done;']
       containers:
       - name: frontend
         image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
@@ -41,6 +41,17 @@ spec:
           value: "{{ include "qiskit-studio.codegen.origin" . }}/chat"
         - name: NEXT_PUBLIC_RUNCODE_URL
           value: "{{ include "qiskit-studio.coderun.origin" . }}/run"
+        resources:
+{{ toYaml .Values.frontend.resources | indent 10 }}
+{{- if .Values.frontend.startupProbe }}
+        startupProbe:
+          tcpSocket:
+            port: {{ .Values.frontend.service.port }}
+          initialDelaySeconds: {{ .Values.frontend.startupProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.frontend.startupProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.frontend.startupProbe.timeoutSeconds }}
+          failureThreshold: {{ .Values.frontend.startupProbe.failureThreshold }}
+{{- end }}
         readinessProbe:
           tcpSocket:
             port: {{ .Values.frontend.service.port }}
@@ -52,17 +63,17 @@ spec:
           initialDelaySeconds: 30
           periodSeconds: 10
       - name: ui-warmup
-        image: busybox:1.37
-        command: ["sh", "-c"]
+        image: registry.access.redhat.com/ubi9/ubi-minimal:latest
+        command: ["/bin/bash", "-c"]
         args:
           - |
             echo "Waiting for frontend to be ready..."
-            until wget -q -O /dev/null http://{{ .Release.Name }}-frontend:{{ .Values.frontend.service.port }}/; do
+            until curl -f -s http://{{ .Release.Name }}-frontend:{{ .Values.frontend.service.port }}/ >/dev/null 2>&1; do
               echo "Frontend not yet ready, retrying in 5 seconds..."
               sleep 5
             done
             echo "Frontend is ready. Warming up UI..."
-            wget -q -O /dev/null http://{{ .Release.Name }}-frontend:{{ .Values.frontend.service.port }}/
+            curl -f -s http://{{ .Release.Name }}-frontend:{{ .Values.frontend.service.port }}/ >/dev/null 2>&1
             echo "UI warmed up."
             sleep infinity # Keep the container alive to prevent CrashLoopBackOff
       {{- $pullSecret := include "qiskit-studio.imagePullSecretName" . }}
@@ -70,3 +81,5 @@ spec:
       imagePullSecrets:
         - name: {{ $pullSecret }}
       {{- end }}
+
+# Made with Bob

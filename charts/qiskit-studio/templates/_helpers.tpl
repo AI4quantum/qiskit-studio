@@ -98,7 +98,10 @@ Return the public-facing origin URL(s) for the frontend, including additional CO
 */}}
 {{- define "qiskit-studio.frontend.origin" -}}
 {{- $origins := list -}}
-{{- if .Values.ingress.enabled -}}
+{{- if and .Values.route.enabled (eq .Values.route.type "openshift") -}}
+    {{- $host := .Values.frontend.route.host | default (printf "%s.%s.%s" .Values.frontend.route.name .Release.Namespace .Values.route.domain) -}}
+    {{- $origins = append $origins (printf "https://%s" $host) -}}
+{{- else if .Values.ingress.enabled -}}
     {{- $origins = append $origins (printf "%s://%s" .Values.global.scheme .Values.ingress.host) -}}
 {{- else -}}
     {{- $origins = append $origins (printf "%s://%s:%d" .Values.global.scheme .Values.global.hostname (int .Values.frontend.service.nodePort)) -}}
@@ -114,7 +117,10 @@ Return the public-facing origin URL(s) for the frontend, including additional CO
 Return the public-facing origin URL for the chat service.
 */}}
 {{- define "qiskit-studio.chat.origin" -}}
-{{- if .Values.ingress.enabled -}}
+{{- if and .Values.route.enabled (eq .Values.route.type "openshift") -}}
+{{- $host := .Values.chat.route.host | default (printf "%s.%s.%s" .Values.chat.route.name .Release.Namespace .Values.route.domain) -}}
+{{- printf "https://%s" $host -}}
+{{- else if .Values.ingress.enabled -}}
 {{- printf "%s://%s/chat" .Values.global.scheme .Values.ingress.host -}}
 {{- else -}}
 {{- printf "%s://%s:%d" .Values.global.scheme .Values.global.hostname (int .Values.chat.service.nodePort) -}}
@@ -125,7 +131,10 @@ Return the public-facing origin URL for the chat service.
 Return the public-facing origin URL for the codegen service.
 */}}
 {{- define "qiskit-studio.codegen.origin" -}}
-{{- if .Values.ingress.enabled -}}
+{{- if and .Values.route.enabled (eq .Values.route.type "openshift") -}}
+{{- $host := .Values.codegen.route.host | default (printf "%s.%s.%s" .Values.codegen.route.name .Release.Namespace .Values.route.domain) -}}
+{{- printf "https://%s" $host -}}
+{{- else if .Values.ingress.enabled -}}
 {{- printf "%s://%s/codegen" .Values.global.scheme .Values.ingress.host -}}
 {{- else -}}
 {{- printf "%s://%s:%d" .Values.global.scheme .Values.global.hostname (int .Values.codegen.service.nodePort) -}}
@@ -136,7 +145,10 @@ Return the public-facing origin URL for the codegen service.
 Return the public-facing origin URL for the coderun service.
 */}}
 {{- define "qiskit-studio.coderun.origin" -}}
-{{- if .Values.ingress.enabled -}}
+{{- if and .Values.route.enabled (eq .Values.route.type "openshift") -}}
+{{- $host := .Values.coderun.route.host | default (printf "%s.%s.%s" .Values.coderun.route.name .Release.Namespace .Values.route.domain) -}}
+{{- printf "https://%s" $host -}}
+{{- else if .Values.ingress.enabled -}}
 {{- printf "%s://%s/coderun" .Values.global.scheme .Values.ingress.host -}}
 {{- else -}}
 {{- printf "%s://%s:%d" .Values.global.scheme .Values.global.hostname (int .Values.coderun.service.nodePort) -}}

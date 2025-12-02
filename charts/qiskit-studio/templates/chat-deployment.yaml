@@ -85,6 +85,8 @@ spec:
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 5
+        resources:
+{{ toYaml .Values.chat.resources | indent 10 }}
       {{- $pullSecret := include "qiskit-studio.imagePullSecretName" . }}
       {{- if $pullSecret }}
       imagePullSecrets:
