@@ -8,6 +8,7 @@
 import { memo } from "react"
 import { Handle, Position, type NodeProps } from "reactflow"
 import { Card } from "@/components/ui/card"
+import { ExecuteIcon } from "@/components/icons/execute-icon"
 import { Spinner } from "@/components/ui/spinner"
 
 interface ExecutionNodeData {
@@ -24,7 +25,7 @@ export const ExecutionNode = memo(({ data, isConnectable }: NodeProps<ExecutionN
     <Card className="w-64 border-0 shadow-md rounded-none overflow-hidden">
       <div className="bg-[#E4EDF7] h-12 flex items-center">
         <div className="w-12 h-12 bg-[#0E62FE] flex items-center justify-center text-white mr-2">
-          <img src="/node_icons/execute.svg" alt="Execute" width="24" height="24" className="filter brightness-0 invert" />
+          <ExecuteIcon className="w-6 h-6 text-white" />
         </div>
         <div className="text-sm font-medium text-black flex-1 flex items-center">
           {data.label}
@@ -33,36 +34,36 @@ export const ExecutionNode = memo(({ data, isConnectable }: NodeProps<ExecutionN
           )}
         </div>
       </div>
-      <Handle 
-        type="target" 
-        position={Position.Top} 
-        isConnectable={isConnectable} 
-        style={{ 
-          backgroundColor: 'white', 
-          border: '1px solid #0E62FE', 
-          borderRadius: '50%', 
-          width: '16px', 
-          height: '16px', 
-          display: 'flex', 
-          alignItems: 'center', 
+      <Handle
+        type="target"
+        position={Position.Top}
+        isConnectable={isConnectable}
+        style={{
+          backgroundColor: 'white',
+          border: '1px solid #0E62FE',
+          borderRadius: '50%',
+          width: '16px',
+          height: '16px',
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
           top: '-20px'
         }}
       >
         <div style={{ backgroundColor: '#0E62FE', borderRadius: '50%', width: '6px', height: '6px' }} />
       </Handle>
-      <Handle 
-        type="source" 
-        position={Position.Bottom} 
-        isConnectable={isConnectable} 
-        style={{ 
-          backgroundColor: 'white', 
-          border: '1px solid #0E62FE', 
-          borderRadius: '50%', 
-          width: '16px', 
-          height: '16px', 
-          display: 'flex', 
-          alignItems: 'center', 
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        isConnectable={isConnectable}
+        style={{
+          backgroundColor: 'white',
+          border: '1px solid #0E62FE',
+          borderRadius: '50%',
+          width: '16px',
+          height: '16px',
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
           bottom: '-20px'
         }}

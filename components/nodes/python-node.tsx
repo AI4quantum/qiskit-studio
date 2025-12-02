@@ -11,6 +11,7 @@ import { Card } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Info, Maximize2, Wand2, Loader2 } from "lucide-react"
+import { MapIcon } from "@/components/icons/map-icon"
 import { Spinner } from "@/components/ui/spinner"
 import {
   Dialog,
@@ -34,8 +35,8 @@ interface PythonNodeData {
 
 export const PythonNode = memo(({ id, data, isConnectable }: NodeProps<PythonNodeData>) => {
   const [inputValue, setInputValue] = useState(
-    data.inputCode || 
-    data.inputValue || 
+    data.inputCode ||
+    data.inputValue ||
     `graph.add_nodes_from(np.arange(0, n, 1))
 edge_list = [
     (0, 1, 1.0),
@@ -90,11 +91,11 @@ python markdown, explanations, or any other text.\n`;
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       })
-      
+
       if (!response.ok) {
         throw new Error(`API request failed with status ${response.status}`)
       }
-      
+
       const result = await response.json()
 
       let newCode = ""
@@ -142,7 +143,7 @@ python markdown, explanations, or any other text.\n`;
     if (!data.pythonCode || !inputValue.trim()) {
       return data.pythonCode || ''
     }
-    
+
     const inputSectionRegex = /(#{4,6}\s*INPUT PYTHON[\s\S]*?)(#{4,6}\s*END INPUT PYTHON)/g
     return data.pythonCode.replace(inputSectionRegex, (_, start, end) => {
       return start.split('\n')[0] + '\n' + inputValue.trim() + '\n' + end
@@ -151,18 +152,18 @@ python markdown, explanations, or any other text.\n`;
 
   return (
     <>
-      <Handle 
-        type="target" 
-        position={Position.Top} 
-        isConnectable={isConnectable} 
-        style={{ 
-          backgroundColor: 'white', 
-          border: '1px solid #D02771', 
-          borderRadius: '50%', 
-          width: '16px', 
-          height: '16px', 
-          display: 'flex', 
-          alignItems: 'center', 
+      <Handle
+        type="target"
+        position={Position.Top}
+        isConnectable={isConnectable}
+        style={{
+          backgroundColor: 'white',
+          border: '1px solid #D02771',
+          borderRadius: '50%',
+          width: '16px',
+          height: '16px',
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
           top: '-20px'
         }}
@@ -172,7 +173,7 @@ python markdown, explanations, or any other text.\n`;
       <Card className="w-64 border-0 shadow-md rounded-none overflow-hidden">
         <div className="bg-[#FFEFF7] h-12 flex items-center">
           <div className="w-12 h-12 bg-[#D02771] flex items-center justify-center text-white mr-2">
-            <img src="/node_icons/custom-code-snippet.svg" alt="Code" width="24" height="24" className="filter brightness-0 invert" />
+            <MapIcon className="w-6 h-6 text-white" />
           </div>
           <div className="text-sm font-medium text-black flex-1 flex items-center">
             {data.label}
@@ -273,18 +274,18 @@ python markdown, explanations, or any other text.\n`;
           </DialogContent>
         </Dialog>
       </Card>
-      <Handle 
-        type="source" 
-        position={Position.Bottom} 
-        isConnectable={isConnectable} 
-        style={{ 
-          backgroundColor: 'white', 
-          border: '1px solid #D02771', 
-          borderRadius: '50%', 
-          width: '16px', 
-          height: '16px', 
-          display: 'flex', 
-          alignItems: 'center', 
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        isConnectable={isConnectable}
+        style={{
+          backgroundColor: 'white',
+          border: '1px solid #D02771',
+          borderRadius: '50%',
+          width: '16px',
+          height: '16px',
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
           bottom: '-20px'
         }}

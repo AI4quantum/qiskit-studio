@@ -14,6 +14,7 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { ChevronDown, ChevronUp, Info } from "lucide-react"
+import { OptimizeIcon } from "@/components/icons/optimize-icon"
 import { Spinner } from "@/components/ui/spinner"
 import {
   Dialog,
@@ -43,7 +44,7 @@ export const TranspilerNode = memo(({ id, data, isConnectable }: NodeProps<Trans
   const [options, setOptions] = useState({
     optimizationLevel: data.optimizationLevel || 1,
     layout: data.layout || "sabre",
-    routing: data.routing || "stochastic", 
+    routing: data.routing || "stochastic",
     translation: data.translation || "translator",
     enableScheduling: data.enableScheduling || false,
   })
@@ -52,7 +53,7 @@ export const TranspilerNode = memo(({ id, data, isConnectable }: NodeProps<Trans
     const level = value[0]
     const newOptions = { ...options, optimizationLevel: level }
     setOptions(newOptions)
-    
+
     const optionsString = `transpiler_options = {
     "optimization_level": ${level},
     "layout_method": "${newOptions.layout}",
@@ -61,21 +62,21 @@ export const TranspilerNode = memo(({ id, data, isConnectable }: NodeProps<Trans
     "scheduling_method": "${newOptions.enableScheduling ? 'asap' : 'none'}",
     "seed_transpiler": 42
 }`
-    
+
     data.onInputChange?.(id || '', optionsString)
   }
 
   const handleOptimizationLevelCommit = (value: number[]) => {
     const level = value[0]
     const newOptions = { ...options, optimizationLevel: level }
-    
+
     data.onParameterChange?.(id || '', 'optimization_level', level)
   }
 
   const handleLayoutChange = (value: string) => {
     const newOptions = { ...options, layout: value }
     setOptions(newOptions)
-    
+
     const optionsString = `transpiler_options = {
     "optimization_level": ${newOptions.optimizationLevel},
     "layout_method": "${value}",
@@ -84,7 +85,7 @@ export const TranspilerNode = memo(({ id, data, isConnectable }: NodeProps<Trans
     "scheduling_method": "${newOptions.enableScheduling ? 'asap' : 'none'}",
     "seed_transpiler": 42
 }`
-    
+
     data.onInputChange?.(id || '', optionsString)
     data.onParameterChange?.(id || '', 'layout_method', value)
   }
@@ -92,7 +93,7 @@ export const TranspilerNode = memo(({ id, data, isConnectable }: NodeProps<Trans
   const handleRoutingChange = (value: string) => {
     const newOptions = { ...options, routing: value }
     setOptions(newOptions)
-    
+
     const optionsString = `transpiler_options = {
     "optimization_level": ${newOptions.optimizationLevel},
     "layout_method": "${newOptions.layout}",
@@ -101,7 +102,7 @@ export const TranspilerNode = memo(({ id, data, isConnectable }: NodeProps<Trans
     "scheduling_method": "${newOptions.enableScheduling ? 'asap' : 'none'}",
     "seed_transpiler": 42
 }`
-    
+
     data.onInputChange?.(id || '', optionsString)
     data.onParameterChange?.(id || '', 'routing_method', value)
   }
@@ -109,7 +110,7 @@ export const TranspilerNode = memo(({ id, data, isConnectable }: NodeProps<Trans
   const handleTranslationChange = (value: string) => {
     const newOptions = { ...options, translation: value }
     setOptions(newOptions)
-    
+
     const optionsString = `transpiler_options = {
     "optimization_level": ${newOptions.optimizationLevel},
     "layout_method": "${newOptions.layout}",
@@ -118,7 +119,7 @@ export const TranspilerNode = memo(({ id, data, isConnectable }: NodeProps<Trans
     "scheduling_method": "${newOptions.enableScheduling ? 'asap' : 'none'}",
     "seed_transpiler": 42
 }`
-    
+
     data.onInputChange?.(id || '', optionsString)
     data.onParameterChange?.(id || '', 'translation_method', value)
   }
@@ -126,7 +127,7 @@ export const TranspilerNode = memo(({ id, data, isConnectable }: NodeProps<Trans
   const handleSchedulingChange = (checked: boolean) => {
     const newOptions = { ...options, enableScheduling: checked }
     setOptions(newOptions)
-    
+
     const optionsString = `transpiler_options = {
     "optimization_level": ${newOptions.optimizationLevel},
     "layout_method": "${newOptions.layout}",
@@ -135,7 +136,7 @@ export const TranspilerNode = memo(({ id, data, isConnectable }: NodeProps<Trans
     "scheduling_method": "${checked ? 'asap' : 'none'}",
     "seed_transpiler": 42
 }`
-    
+
     data.onInputChange?.(id || '', optionsString)
     data.onParameterChange?.(id || '', 'scheduling_method', checked ? 'asap' : 'none')
   }
@@ -144,7 +145,7 @@ export const TranspilerNode = memo(({ id, data, isConnectable }: NodeProps<Trans
     <Card className="w-64 border-0 shadow-md rounded-none overflow-hidden">
       <div className="bg-[#F1EDF9] h-12 flex items-center">
         <div className="w-12 h-12 bg-[#893FFC] flex items-center justify-center text-white mr-2">
-          <img src="/node_icons/optimize.svg" alt="Optimize" width="24" height="24" className="filter brightness-0 invert" />
+          <OptimizeIcon className="w-6 h-6 text-white" />
         </div>
         <div className="text-sm font-medium text-black flex-1 flex items-center">
           {data.label}
@@ -183,13 +184,13 @@ export const TranspilerNode = memo(({ id, data, isConnectable }: NodeProps<Trans
               <span className="text-sm text-[#333] font-medium mb-2">Optimization Level</span>
               <div className="flex items-center justify-between">
                 <span className="text-xs text-[#333]">0</span>
-                <Slider 
-                  value={[options.optimizationLevel]} 
+                <Slider
+                  value={[options.optimizationLevel]}
                   onValueChange={handleOptimizationLevelChange}
                   onValueCommit={handleOptimizationLevelCommit}
-                  max={3} 
-                  step={1} 
-                  className="w-24 mx-2" 
+                  max={3}
+                  step={1}
+                  className="w-24 mx-2"
                 />
                 <span className="text-xs text-[#333]">3</span>
               </div>
@@ -272,14 +273,12 @@ export const TranspilerNode = memo(({ id, data, isConnectable }: NodeProps<Trans
                   <button
                     type="button"
                     onClick={() => handleSchedulingChange(!options.enableScheduling)}
-                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${
-                      options.enableScheduling ? 'bg-[#1A8038]' : 'bg-gray-200'
-                    }`}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${options.enableScheduling ? 'bg-[#1A8038]' : 'bg-gray-200'
+                      }`}
                   >
                     <span
-                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        options.enableScheduling ? 'translate-x-6' : 'translate-x-1'
-                      }`}
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${options.enableScheduling ? 'translate-x-6' : 'translate-x-1'
+                        }`}
                     />
                     {options.enableScheduling && (
                       <span className="absolute left-1.5 top-1 text-white text-xs">✓</span>
@@ -292,43 +291,43 @@ export const TranspilerNode = memo(({ id, data, isConnectable }: NodeProps<Trans
         </div>
       </div>
 
-      <Handle 
-        type="target" 
-        position={Position.Top} 
-        isConnectable={isConnectable} 
-        style={{ 
-          backgroundColor: 'white', 
-          border: '1px solid #893FFC', 
-          borderRadius: '50%', 
-          width: '16px', 
-          height: '16px', 
-          display: 'flex', 
-          alignItems: 'center', 
+      <Handle
+        type="target"
+        position={Position.Top}
+        isConnectable={isConnectable}
+        style={{
+          backgroundColor: 'white',
+          border: '1px solid #893FFC',
+          borderRadius: '50%',
+          width: '16px',
+          height: '16px',
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
           top: '-20px'
         }}
       >
         <div style={{ backgroundColor: '#893FFC', borderRadius: '50%', width: '6px', height: '6px' }} />
       </Handle>
-      <Handle 
-        type="source" 
-        position={Position.Bottom} 
-        isConnectable={isConnectable} 
-        style={{ 
-          backgroundColor: 'white', 
-          border: '1px solid #893FFC', 
-          borderRadius: '50%', 
-          width: '16px', 
-          height: '16px', 
-          display: 'flex', 
-          alignItems: 'center', 
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        isConnectable={isConnectable}
+        style={{
+          backgroundColor: 'white',
+          border: '1px solid #893FFC',
+          borderRadius: '50%',
+          width: '16px',
+          height: '16px',
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
           bottom: '-20px'
         }}
       >
         <div style={{ backgroundColor: '#893FFC', borderRadius: '50%', width: '6px', height: '6px' }} />
       </Handle>
-      
+
     </Card>
   )
 })
