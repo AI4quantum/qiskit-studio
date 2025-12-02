@@ -43,6 +43,15 @@ spec:
           value: "{{ include "qiskit-studio.coderun.origin" . }}/run"
         resources:
 {{ toYaml .Values.frontend.resources | indent 10 }}
+{{- if .Values.frontend.startupProbe }}
+        startupProbe:
+          tcpSocket:
+            port: {{ .Values.frontend.service.port }}
+          initialDelaySeconds: {{ .Values.frontend.startupProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.frontend.startupProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.frontend.startupProbe.timeoutSeconds }}
+          failureThreshold: {{ .Values.frontend.startupProbe.failureThreshold }}
+{{- end }}
         readinessProbe:
           tcpSocket:
             port: {{ .Values.frontend.service.port }}
@@ -72,3 +81,5 @@ spec:
       imagePullSecrets:
         - name: {{ $pullSecret }}
       {{- end }}
+
+# Made with Bob

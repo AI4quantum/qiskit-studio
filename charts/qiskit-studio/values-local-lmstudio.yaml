@@ -7,7 +7,7 @@ global:
       # LM Studio runs on port 1234 by default
       baseUrl: http://host.docker.internal:1234/v1
       # Using granite4 tiny for chat
-      model: "ibm/granite-4-h-tiny"
+      model: "granite-4-h-tiny"
       secret:
         create: true
         name: local-llm-secret
