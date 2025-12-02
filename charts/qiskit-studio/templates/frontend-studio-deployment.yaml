@@ -16,6 +16,7 @@ spec:
         {{- include "qiskit-studio.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: frontend
     spec:
+      serviceAccountName: {{ .Values.frontend.serviceAccountName }}
       initContainers:
       - name: wait-for-chat
         image: busybox:1.37

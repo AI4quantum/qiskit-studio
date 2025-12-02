@@ -16,6 +16,7 @@ spec:
         {{- include "qiskit-studio.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: codegen
     spec:
+      serviceAccountName: {{ .Values.codegen.serviceAccountName }}
       {{- if .Values.global.llm.initChecks.enabled }}
       initContainers:
       - name: wait-for-chat-llm

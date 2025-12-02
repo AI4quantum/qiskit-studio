@@ -16,6 +16,7 @@ spec:
         {{- include "qiskit-studio.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: coderun
     spec:
+      serviceAccountName: {{ .Values.coderun.serviceAccountName }}
       containers:
       - name: coderun
         image: "{{ .Values.coderun.image.repository }}:{{ .Values.coderun.image.tag }}"
