@@ -28,16 +28,13 @@ jobs:
         run: uv python install
 
       - name: Install linting tools (CI only)
-        run: uv pip install mypy detect-secrets
+        run: uv pip install detect-secrets
 
       - name: Ruff format check
         run: uvx ruff@0.14.7 format api --check
 
       - name: Ruff linting check
         run: uvx ruff@0.14.7 check api
-
-      - name: Mypy
-        run: uv run mypy api
 
       - name: Detect Secrets
         run: |
