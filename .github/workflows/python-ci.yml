@@ -27,9 +27,6 @@ jobs:
       - name: Set up Python
         run: uv python install
 
-      - name: Install linting tools (CI only)
-        run: uv pip install detect-secrets
-
       - name: Ruff format check
         run: uvx ruff@0.14.7 format api --check
 
@@ -38,8 +35,8 @@ jobs:
 
       - name: Detect Secrets
         run: |
-          uv run detect-secrets-hook \
-            --baseline .secrets.baseline
+          git ls-files -z | xargs -0 uvx --from detect-secrets@1.5.0 \
+            detect-secrets-hook --baseline .secrets.baseline
 
   test:
     name: Tests (Python ${{ matrix.python-version }})
