@@ -28,10 +28,12 @@ jobs:
         run: uv python install
 
       - name: Ruff format check
-        run: uvx ruff@0.14.7 format api --check
+        working-directory: api
+        run: uvx ruff@0.14.7 format . --check
 
       - name: Ruff linting check
-        run: uvx ruff@0.14.7 check api
+        working-directory: api
+        run: uvx ruff@0.14.7 check .
 
       - name: Detect Secrets
         run: |
