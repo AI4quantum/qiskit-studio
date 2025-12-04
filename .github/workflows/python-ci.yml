@@ -28,13 +28,13 @@ jobs:
         run: uv python install
 
       - name: Install linting tools (CI only)
-        run: uv pip install black flake8 mypy detect-secrets
+        run: uv pip install mypy detect-secrets
 
-      - name: Black
-        run: uv run black --check api
+      - name: Ruff format check
+        run: uvx ruff@0.14.7 format api --check
 
-      - name: Flake8
-        run: uv run flake8 api
+      - name: Ruff linting check
+        run: uvx ruff@0.14.7 check api
 
       - name: Mypy
         run: uv run mypy api
