@@ -37,5 +37,5 @@ jobs:
 
       - name: Detect Secrets
         run: |
-          git ls-files -z | xargs -0 uvx --from detect-secrets@1.5.0 \
+          git ls-files -z | xargs -0 uvx --from git+https://github.com/IBM/detect-secrets.git@0.13.1+ibm.64.dss \
             detect-secrets-hook --baseline .secrets.baseline
