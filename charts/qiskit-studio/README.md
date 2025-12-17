@@ -126,6 +126,49 @@ helm uninstall qiskit-studio-local
 
 ## Deployment Scenarios
 
+### OpenShift Deployment with Routes
+
+For OpenShift clusters, the chart supports native OpenShift Routes instead of Kubernetes Ingress. Routes provide automatic TLS termination and integrate with OpenShift's built-in router.
+
+**Example: Deploying to OpenShift cluster**
+
+```bash
+helm install qiskit-studio charts/qiskit-studio \
+  -n qiskitstudio \
+  -f charts/qiskit-studio/values-openshift-research.yaml \
+  --disable-openapi-validation
+```
+
+**Note:** The `--disable-openapi-validation` flag is required **only when using OpenShift Routes**. While Helm can validate OpenShift CRDs, validation often fails due to schema inconsistencies between the chart and OpenShift's API server (e.g., field type mismatches, stale cached schemas, or strict enforcement of deprecated fields). This flag skips Helm's client-side validation, allowing the manifests to be sent directly to OpenShift where the admission controller performs the authoritative validation. This flag is not needed for standard Kubernetes Ingress deployments.
+
+This configuration:
+- Enables OpenShift Routes (`route.enabled: true`)
+- Disables Kubernetes Ingress
+- Creates routes with automatic hostname generation: `<service-name>.<namespace>.<domain>`
+- Configures edge TLS termination with automatic certificates
+- Sets appropriate resource limits for OpenShift LimitRange policies
+
+**Accessing the application:**
+- Frontend: `https://frontend.qiskitstudio.example.com`
+- Chat API: `https://chat.qiskitstudio.example.com`
+- Codegen API: `https://codegen.qiskitstudio.example.com`
+- Coderun API: `https://coderun.qiskitstudio.example.com`
+
+**Route Configuration:**
+
+Routes are automatically generated using the pattern: `<service-name>.<namespace>.<domain>`
+
+Default service names are: `frontend`, `chat`, `codegen`, `coderun`
+
+To customize route names or hostnames for a specific service:
+
+```yaml
+frontend:
+  route:
+    name: "studio"  # Changes route to: studio.qiskitstudio.example.com
+    host: "my-custom-hostname.example.com"  # Or override hostname completely
+```
+
 ### Local Deployment (Default)
 
 The Quick Start guide above uses the `values-local.yaml` file, which is the recommended method for local development. This configuration disables Ingress and exposes services via `NodePort` for easy access on your local machine.
@@ -209,7 +252,11 @@ This table lists the parameters that you are most likely to configure for both l
 | `codegen.image.tag` | The codegen image tag. | `0.5.0` |
 | `coderun.image.repository` | The coderun image repository. | `coderun-agent` |
 | `coderun.image.tag` | The coderun image tag. | `v0.0.3` |
-| `ingress.enabled` | Whether to enable ingress. | `false` |
+| `route.enabled` | Whether to enable OpenShift Routes. | `false` |
+| `route.type` | Route type (`openshift` for OpenShift Routes). | `"openshift"` |
+| `route.host` | Custom route hostname (leave empty for auto-generated). | `""` |
+| `route.timeout` | HAProxy timeout for routes. | `"120s"` |
+| `ingress.enabled` | Whether to enable Kubernetes Ingress. | `false` |
 | `ingress.host` | The ingress host. (Configured in `values-cloud.yaml`) | `agents.experimental.quantum.ibm.com` |
 | `extraEnvVars` | A list of additional environment variables to be added to all pods. | `[]` |
 

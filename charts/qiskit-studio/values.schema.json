@@ -155,17 +155,57 @@
       "description": "Additional environment variables to be added to all pods",
       "items": {
         "type": "object",
-        "required": ["name", "value"],
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "Name of the environment variable"
+        "required": ["name"],
+        "oneOf": [
+          {
+            "required": ["value"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name of the environment variable"
+              },
+              "value": {
+                "type": "string",
+                "description": "Value of the environment variable"
+              }
+            }
           },
-          "value": {
-            "type": "string",
-            "description": "Value of the environment variable"
+          {
+            "required": ["valueFrom"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name of the environment variable"
+              },
+              "valueFrom": {
+                "type": "object",
+                "description": "Source for the environment variable's value",
+                "required": ["secretKeyRef"],
+                "properties": {
+                  "secretKeyRef": {
+                    "type": "object",
+                    "description": "Selects a key from a Secret",
+                    "required": ["name", "key"],
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "Name of the secret"
+                      },
+                      "key": {
+                        "type": "string",
+                        "description": "Key within the secret"
+                      },
+                      "optional": {
+                        "type": "boolean",
+                        "description": "Specify whether the Secret or its key must be defined"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
-        }
+        ]
       },
       "default": []
     },
@@ -264,17 +304,57 @@
           "description": "Additional environment variables for the frontend pod",
           "items": {
             "type": "object",
-            "required": ["name", "value"],
-            "properties": {
-              "name": {
-                "type": "string",
-                "description": "Name of the environment variable"
+            "required": ["name"],
+            "oneOf": [
+              {
+                "required": ["value"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the environment variable"
+                  },
+                  "value": {
+                    "type": "string",
+                    "description": "Value of the environment variable"
+                  }
+                }
               },
-              "value": {
-                "type": "string",
-                "description": "Value of the environment variable"
+              {
+                "required": ["valueFrom"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the environment variable"
+                  },
+                  "valueFrom": {
+                    "type": "object",
+                    "description": "Source for the environment variable's value",
+                    "required": ["secretKeyRef"],
+                    "properties": {
+                      "secretKeyRef": {
+                        "type": "object",
+                        "description": "Selects a key from a Secret",
+                        "required": ["name", "key"],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "description": "Name of the secret"
+                          },
+                          "key": {
+                            "type": "string",
+                            "description": "Key within the secret"
+                          },
+                          "optional": {
+                            "type": "boolean",
+                            "description": "Specify whether the Secret or its key must be defined"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
-            }
+            ]
           },
           "default": []
         }
@@ -375,17 +455,57 @@
           "description": "Additional environment variables for the chat pod",
           "items": {
             "type": "object",
-            "required": ["name", "value"],
-            "properties": {
-              "name": {
-                "type": "string",
-                "description": "Name of the environment variable"
+            "required": ["name"],
+            "oneOf": [
+              {
+                "required": ["value"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the environment variable"
+                  },
+                  "value": {
+                    "type": "string",
+                    "description": "Value of the environment variable"
+                  }
+                }
               },
-              "value": {
-                "type": "string",
-                "description": "Value of the environment variable"
+              {
+                "required": ["valueFrom"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the environment variable"
+                  },
+                  "valueFrom": {
+                    "type": "object",
+                    "description": "Source for the environment variable's value",
+                    "required": ["secretKeyRef"],
+                    "properties": {
+                      "secretKeyRef": {
+                        "type": "object",
+                        "description": "Selects a key from a Secret",
+                        "required": ["name", "key"],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "description": "Name of the secret"
+                          },
+                          "key": {
+                            "type": "string",
+                            "description": "Key within the secret"
+                          },
+                          "optional": {
+                            "type": "boolean",
+                            "description": "Specify whether the Secret or its key must be defined"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
-            }
+            ]
           },
           "default": []
         }
@@ -486,17 +606,57 @@
           "description": "Additional environment variables for the codegen pod",
           "items": {
             "type": "object",
-            "required": ["name", "value"],
-            "properties": {
-              "name": {
-                "type": "string",
-                "description": "Name of the environment variable"
+            "required": ["name"],
+            "oneOf": [
+              {
+                "required": ["value"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the environment variable"
+                  },
+                  "value": {
+                    "type": "string",
+                    "description": "Value of the environment variable"
+                  }
+                }
               },
-              "value": {
-                "type": "string",
-                "description": "Value of the environment variable"
+              {
+                "required": ["valueFrom"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the environment variable"
+                  },
+                  "valueFrom": {
+                    "type": "object",
+                    "description": "Source for the environment variable's value",
+                    "required": ["secretKeyRef"],
+                    "properties": {
+                      "secretKeyRef": {
+                        "type": "object",
+                        "description": "Selects a key from a Secret",
+                        "required": ["name", "key"],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "description": "Name of the secret"
+                          },
+                          "key": {
+                            "type": "string",
+                            "description": "Key within the secret"
+                          },
+                          "optional": {
+                            "type": "boolean",
+                            "description": "Specify whether the Secret or its key must be defined"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
-            }
+            ]
           },
           "default": []
         }
@@ -633,17 +793,57 @@
           "description": "Additional environment variables for the knowledge MCP pod",
           "items": {
             "type": "object",
-            "required": ["name", "value"],
-            "properties": {
-              "name": {
-                "type": "string",
-                "description": "Name of the environment variable"
+            "required": ["name"],
+            "oneOf": [
+              {
+                "required": ["value"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the environment variable"
+                  },
+                  "value": {
+                    "type": "string",
+                    "description": "Value of the environment variable"
+                  }
+                }
               },
-              "value": {
-                "type": "string",
-                "description": "Value of the environment variable"
+              {
+                "required": ["valueFrom"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the environment variable"
+                  },
+                  "valueFrom": {
+                    "type": "object",
+                    "description": "Source for the environment variable's value",
+                    "required": ["secretKeyRef"],
+                    "properties": {
+                      "secretKeyRef": {
+                        "type": "object",
+                        "description": "Selects a key from a Secret",
+                        "required": ["name", "key"],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "description": "Name of the secret"
+                          },
+                          "key": {
+                            "type": "string",
+                            "description": "Key within the secret"
+                          },
+                          "optional": {
+                            "type": "boolean",
+                            "description": "Specify whether the Secret or its key must be defined"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
-            }
+            ]
           },
           "default": []
         }
@@ -744,17 +944,57 @@
           "description": "Additional environment variables for the coderun pod",
           "items": {
             "type": "object",
-            "required": ["name", "value"],
-            "properties": {
-              "name": {
-                "type": "string",
-                "description": "Name of the environment variable"
+            "required": ["name"],
+            "oneOf": [
+              {
+                "required": ["value"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the environment variable"
+                  },
+                  "value": {
+                    "type": "string",
+                    "description": "Value of the environment variable"
+                  }
+                }
               },
-              "value": {
-                "type": "string",
-                "description": "Value of the environment variable"
+              {
+                "required": ["valueFrom"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the environment variable"
+                  },
+                  "valueFrom": {
+                    "type": "object",
+                    "description": "Source for the environment variable's value",
+                    "required": ["secretKeyRef"],
+                    "properties": {
+                      "secretKeyRef": {
+                        "type": "object",
+                        "description": "Selects a key from a Secret",
+                        "required": ["name", "key"],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "description": "Name of the secret"
+                          },
+                          "key": {
+                            "type": "string",
+                            "description": "Key within the secret"
+                          },
+                          "optional": {
+                            "type": "boolean",
+                            "description": "Specify whether the Secret or its key must be defined"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
-            }
+            ]
           },
           "default": []
         }
@@ -827,17 +1067,57 @@
           "description": "Additional environment variables for the Milvus pod",
           "items": {
             "type": "object",
-            "required": ["name", "value"],
-            "properties": {
-              "name": {
-                "type": "string",
-                "description": "Name of the environment variable"
+            "required": ["name"],
+            "oneOf": [
+              {
+                "required": ["value"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the environment variable"
+                  },
+                  "value": {
+                    "type": "string",
+                    "description": "Value of the environment variable"
+                  }
+                }
               },
-              "value": {
-                "type": "string",
-                "description": "Value of the environment variable"
+              {
+                "required": ["valueFrom"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the environment variable"
+                  },
+                  "valueFrom": {
+                    "type": "object",
+                    "description": "Source for the environment variable's value",
+                    "required": ["secretKeyRef"],
+                    "properties": {
+                      "secretKeyRef": {
+                        "type": "object",
+                        "description": "Selects a key from a Secret",
+                        "required": ["name", "key"],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "description": "Name of the secret"
+                          },
+                          "key": {
+                            "type": "string",
+                            "description": "Key within the secret"
+                          },
+                          "optional": {
+                            "type": "boolean",
+                            "description": "Specify whether the Secret or its key must be defined"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
-            }
+            ]
           },
           "default": []
         }
@@ -924,17 +1204,57 @@
           "description": "Additional environment variables for the knowledge preloader job pod",
           "items": {
             "type": "object",
-            "required": ["name", "value"],
-            "properties": {
-              "name": {
-                "type": "string",
-                "description": "Name of the environment variable"
+            "required": ["name"],
+            "oneOf": [
+              {
+                "required": ["value"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the environment variable"
+                  },
+                  "value": {
+                    "type": "string",
+                    "description": "Value of the environment variable"
+                  }
+                }
               },
-              "value": {
-                "type": "string",
-                "description": "Value of the environment variable"
+              {
+                "required": ["valueFrom"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the environment variable"
+                  },
+                  "valueFrom": {
+                    "type": "object",
+                    "description": "Source for the environment variable's value",
+                    "required": ["secretKeyRef"],
+                    "properties": {
+                      "secretKeyRef": {
+                        "type": "object",
+                        "description": "Selects a key from a Secret",
+                        "required": ["name", "key"],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "description": "Name of the secret"
+                          },
+                          "key": {
+                            "type": "string",
+                            "description": "Key within the secret"
+                          },
+                          "optional": {
+                            "type": "boolean",
+                            "description": "Specify whether the Secret or its key must be defined"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
-            }
+            ]
           },
           "default": []
         },

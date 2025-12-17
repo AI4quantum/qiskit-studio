@@ -16,6 +16,7 @@ spec:
         {{- include "qiskit-studio.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: coderun
     spec:
+      serviceAccountName: {{ .Values.coderun.serviceAccountName }}
       containers:
       - name: coderun
         image: "{{ .Values.coderun.image.repository }}:{{ .Values.coderun.image.tag }}"
@@ -24,6 +25,8 @@ spec:
 {{- include "qiskit-studio.extraEnvVars" (dict "Values" .Values "extraEnvVars" .Values.coderun.extraEnvVars) | nindent 8 }}
         ports:
         - containerPort: {{ .Values.coderun.service.port }}
+        resources:
+{{ toYaml .Values.coderun.resources | indent 10 }}
       {{- $pullSecret := include "qiskit-studio.imagePullSecretName" . }}
       {{- if $pullSecret }}
       imagePullSecrets:

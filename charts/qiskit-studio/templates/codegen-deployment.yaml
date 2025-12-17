@@ -16,6 +16,7 @@ spec:
         {{- include "qiskit-studio.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: codegen
     spec:
+      serviceAccountName: {{ .Values.codegen.serviceAccountName }}
       {{- if .Values.global.llm.initChecks.enabled }}
       initContainers:
       - name: wait-for-chat-llm
@@ -82,6 +83,8 @@ spec:
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 5
+        resources:
+{{ toYaml .Values.codegen.resources | indent 10 }}
       {{- $pullSecret := include "qiskit-studio.imagePullSecretName" . }}
       {{- if $pullSecret }}
       imagePullSecrets:

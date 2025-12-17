@@ -17,6 +17,7 @@ spec:
         {{- include "qiskit-studio.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: milvus
     spec:
+      serviceAccountName: {{ .Values.milvus.serviceAccountName }}
       securityContext: {{- toYaml .Values.milvus.securityContext | nindent 8 }}
       containers:
       - name: milvus
@@ -56,6 +57,8 @@ spec:
           periodSeconds: 10
           timeoutSeconds: 5
           failureThreshold: 15
+        resources:
+{{ toYaml .Values.milvus.resources | indent 10 }}
         volumeMounts:
           - name: milvus-data
             mountPath: /var/lib/milvus

@@ -1,0 +1,30 @@
+{{- if and .Values.route.enabled (eq .Values.route.type "openshift") }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ .Release.Name }}-frontend
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "qiskit-studio.labels" . | nindent 4 }}
+    app.kubernetes.io/component: frontend
+    ingress: {{ .Release.Namespace }}
+  annotations:
+    haproxy.router.openshift.io/timeout: {{ .Values.route.timeout | default "120s" }}
+{{- with .Values.route.annotations }}
+    {{- toYaml . | nindent 4 }}
+{{- end }}
+spec:
+  host: {{ .Values.frontend.route.host | default (printf "%s.%s.%s" .Values.frontend.route.name .Release.Namespace .Values.route.domain) }}
+  port:
+    targetPort: {{ .Values.frontend.service.port }}
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: {{ .Release.Name }}-frontend
+    weight: 100
+  wildcardPolicy: None
+{{- end }}
+
+# Made with Bob
