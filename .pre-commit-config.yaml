@@ -10,7 +10,7 @@ repos:
     # You are encouraged to use static refs such as tags, instead of branch name
     #
     # Running "pre-commit autoupdate" automatically updates rev to latest tag
-    rev: 1.5.0
+    rev: 0.13.1+ibm.61.dss
     hooks:
       - id: detect-secrets # pragma: whitelist secret
         # Add options for detect-secrets-hook binary. You can run `detect-secrets-hook --help` to list out all possible options.
@@ -18,4 +18,4 @@ repos:
         # when "--baseline" without "--use-all-plugins", pre-commit scan with just plugins in baseline file
         # when "--baseline" with "--use-all-plugins", pre-commit scan with all available plugins
         # add "--fail-on-unaudited" to fail pre-commit for unaudited potential secrets
-        args: [--baseline, .secrets.baseline]
+        args: [--baseline, .secrets.baseline, --use-all-plugins]
