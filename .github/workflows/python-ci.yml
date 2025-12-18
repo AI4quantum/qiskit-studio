@@ -1,0 +1,42 @@
+name: Python CI
+
+on:
+  pull_request:
+    paths:
+      - "api/**"
+      - ".github/workflows/python-ci.yml"
+      - ".secrets.baseline"
+  push:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Ruff format check
+        working-directory: api
+        run: uvx ruff@0.14.7 format . --check
+
+      - name: Ruff linting check
+        working-directory: api
+        run: uvx ruff@0.14.7 check .
+
+      - name: Detect Secrets
+        run: |
+          git ls-files -z | xargs -0 uvx --from git+https://github.com/IBM/detect-secrets.git@0.13.1+ibm.64.dss \
+            detect-secrets-hook --baseline .secrets.baseline

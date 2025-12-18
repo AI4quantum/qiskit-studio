@@ -1,0 +1,19 @@
+[tool.ruff]
+target-version = "py313"
+line-length = 88
+
+[tool.ruff.lint]
+# E: pycodestyle (PEP 8)
+# F: Pyflakes (unused variables, imports, etc.)
+# I: isort (import sorting)
+select = ["E", "F", "I"]
+
+# Temporary ignore this rules when updating existing code
+ignore = ["E402", "I001", "E501"]
+
+[tool.ruff.lint.per-file-ignores]
+# Ignore specific rules in specific files (e.g., .ipynb)
+# E402: Module level import not at top of file
+# I001: isort found an import in the wrong position
+# E501: Line too long
+"api/Code/*.ipynb" = ["E402", "I001", "E501"]
