@@ -24,8 +24,8 @@ const chemistrySimulation: CircuitDemo = {
     {
       id: "chemistry-mapping",
       type: "chemistryNode",
-      data: { 
-        label: "Chemistry", 
+      data: {
+        label: "Chemistry",
         category: "Molecular System",
         details: "N2 molecule with CCSD amplitudes"
       },
@@ -34,8 +34,8 @@ const chemistrySimulation: CircuitDemo = {
     {
       id: "ucj-circuit",
       type: "circuitLibraryNode",
-      data: { 
-        label: "UCJ Circuit", 
+      data: {
+        label: "Circuit Library",
         category: "ffsim",
         details: "Hartree-Fock + UCJ ansatz + measurements"
       },
@@ -45,8 +45,8 @@ const chemistrySimulation: CircuitDemo = {
     {
       id: "transpiler",
       type: "transpilerNode",
-      data: { 
-        label: "Transpiler", 
+      data: {
+        label: "Transpiler",
         category: "Optimization",
         optimizationLevel: 3,
         layout: "sabre",
@@ -62,7 +62,7 @@ const chemistrySimulation: CircuitDemo = {
       id: "sampler",
       type: "runtimeNode",
       data: {
-        label: "Sampler",
+        label: "Runtime Primitives",
         category: "Sampler",
         resilience_level: 1,
         shots: 100000,
@@ -73,8 +73,8 @@ const chemistrySimulation: CircuitDemo = {
     {
       id: "hardware-execution",
       type: "executionNode",
-      data: { 
-        label: "Hardware Execution", 
+      data: {
+        label: "Execution Modes",
         category: "Job",
         details: "Execute on IBM Quantum backend"
       },
@@ -85,7 +85,7 @@ const chemistrySimulation: CircuitDemo = {
       id: "sqd-postprocess",
       type: "postProcessNode",
       data: {
-        label: "SQD Post-process",
+        label: "Post Process Code",
         category: "Python",
         details: "Configuration recovery + fermion solver"
       },
@@ -95,7 +95,7 @@ const chemistrySimulation: CircuitDemo = {
       id: "Output",
       type: "visualizationNode",
       data: {
-        label: "Output",
+        label: "Visualization Module",
         category: "Raw",
         details: "Energy comparison results",
         defaultText: "Exact energy: -1.16 H\nFinal SQD energy: -1.15 H\nError: 0.011 H"
@@ -111,9 +111,9 @@ const chemistrySimulation: CircuitDemo = {
       target: "ucj-circuit",
       animated: true,
       type: "smoothstep",
-      style: { stroke: "#8a3ffc" },
+      style: { stroke: "#D02771" },
       label: "Molecular data",
-      labelStyle: { fill: "#8a3ffc", fontWeight: 600, fontSize: 12 },
+      labelStyle: { fill: "#D02771", fontWeight: 600, fontSize: 12 },
       labelBgStyle: { fill: "white", fillOpacity: 0.9 },
       labelBgPadding: [8, 4],
     },
@@ -124,9 +124,9 @@ const chemistrySimulation: CircuitDemo = {
       target: "transpiler",
       animated: true,
       type: "smoothstep",
-      style: { stroke: "#8a3ffc" },
+      style: { stroke: "#D02771" },
       label: "Circuit",
-      labelStyle: { fill: "#8a3ffc", fontWeight: 600, fontSize: 12 },
+      labelStyle: { fill: "#D02771", fontWeight: 600, fontSize: 12 },
       labelBgStyle: { fill: "white", fillOpacity: 0.9 },
       labelBgPadding: [8, 4],
     },
@@ -137,21 +137,21 @@ const chemistrySimulation: CircuitDemo = {
       target: "sampler",
       animated: true,
       type: "smoothstep",
-      style: { stroke: "#e83e8c" },
+      style: { stroke: "#893FFC" },
       label: "Optimized",
-      labelStyle: { fill: "#e83e8c", fontWeight: 600, fontSize: 12 },
+      labelStyle: { fill: "#893FFC", fontWeight: 600, fontSize: 12 },
       labelBgStyle: { fill: "white", fillOpacity: 0.9 },
       labelBgPadding: [8, 4],
     },
     {
       id: "e-sampler-execution",
-      source: "sampler", 
+      source: "sampler",
       target: "hardware-execution",
       animated: true,
       type: "smoothstep",
-      style: { stroke: "#2563EB" },
+      style: { stroke: "#0E62FE" },
       label: "Execute",
-      labelStyle: { fill: "#2563EB", fontWeight: 600, fontSize: 12 },
+      labelStyle: { fill: "#0E62FE", fontWeight: 600, fontSize: 12 },
       labelBgStyle: { fill: "white", fillOpacity: 0.9 },
       labelBgPadding: [8, 4],
     },
@@ -162,9 +162,9 @@ const chemistrySimulation: CircuitDemo = {
       target: "sqd-postprocess",
       animated: true,
       type: "smoothstep",
-      style: { stroke: "#2563EB" },
+      style: { stroke: "#0E62FE" },
       label: "Results",
-      labelStyle: { fill: "#2563EB", fontWeight: 600, fontSize: 12 },
+      labelStyle: { fill: "#0E62FE", fontWeight: 600, fontSize: 12 },
       labelBgStyle: { fill: "white", fillOpacity: 0.9 },
       labelBgPadding: [8, 4],
     },
@@ -174,9 +174,9 @@ const chemistrySimulation: CircuitDemo = {
       target: "Output",
       animated: true,
       type: "smoothstep",
-      style: { stroke: "#2563EB" },
+      style: { stroke: "#1A8038" },
       label: "Analysis",
-      labelStyle: { fill: "#2563EB", fontWeight: 600, fontSize: 12 },
+      labelStyle: { fill: "#1A8038", fontWeight: 600, fontSize: 12 },
       labelBgStyle: { fill: "white", fillOpacity: 0.9 },
       labelBgPadding: [8, 4],
     },
@@ -193,8 +193,8 @@ const maxCut: CircuitDemo = {
     {
       id: "graph-to-hamiltonian",
       type: "pythonNode",
-      data: { 
-        label: "Graph to Hamiltonian", 
+      data: {
+        label: "Python Code",
         category: "Python",
         details: "Define graph structure and convert to cost Hamiltonian",
         inputCode: `graph.add_nodes_from(np.arange(0, n, 1))\nedge_list = [\n    (0, 1, 1.0),\n    (0, 2, 1.0),\n    (0, 4, 1.0),\n    (1, 2, 1.0),\n    (2, 3, 1.0),\n    (3, 4, 1.0),\n]\ngraph.add_edges_from(edge_list)`
@@ -204,8 +204,8 @@ const maxCut: CircuitDemo = {
     {
       id: "qaoa-circuit",
       type: "circuitLibraryNode",
-      data: { 
-        label: "QAOA Circuit", 
+      data: {
+        label: "Circuit Library",
         category: "QAOAAnsatz",
         details: "2 reps, with measurements"
       },
@@ -215,7 +215,7 @@ const maxCut: CircuitDemo = {
     {
       id: "transpiler",
       type: "transpilerNode",
-      data: { 
+      data: {
         label: "Transpiler",
         category: "Optimization",
         optimizationLevel: 3,
@@ -232,7 +232,7 @@ const maxCut: CircuitDemo = {
       id: "estimator-optimization",
       type: "runtimeNode",
       data: {
-        label: "ESTIMATOR",
+        label: "Runtime Primitives",
         category: "Estimator",
         resilience_level: 2,
         shots: 1000,
@@ -244,7 +244,7 @@ const maxCut: CircuitDemo = {
       id: "estimator-session",
       type: "runtimeNode",
       data: {
-        label: "ESTIMATOR",
+        label: "Runtime Primitives",
         category: "Estimator",
         resilience_level: 1,
         shots: 1000,
@@ -256,7 +256,7 @@ const maxCut: CircuitDemo = {
       id: "sampler",
       type: "runtimeNode",
       data: {
-        label: "SAMPLER",
+        label: "Runtime Primitives",
         category: "Sampler",
         resilience_level: 1,
         shots: 10000,
@@ -269,7 +269,7 @@ const maxCut: CircuitDemo = {
       id: "Output",
       type: "visualizationNode",
       data: {
-        label: "Output",
+        label: "Visualization Module",
         category: "Graph",
         details: "Most likely cut solution analysis",
         defaultText: JSON.stringify({
@@ -289,9 +289,9 @@ const maxCut: CircuitDemo = {
       target: "qaoa-circuit",
       animated: true,
       type: "smoothstep",
-      style: { stroke: "#ff6b35" },
+      style: { stroke: "#D02771" },
       label: "Hamiltonian",
-      labelStyle: { fill: "#ff6b35", fontWeight: 600, fontSize: 12 },
+      labelStyle: { fill: "#D02771", fontWeight: 600, fontSize: 12 },
       labelBgStyle: { fill: "white", fillOpacity: 0.9 },
       labelBgPadding: [8, 4],
     },
@@ -302,9 +302,9 @@ const maxCut: CircuitDemo = {
       target: "transpiler",
       animated: true,
       type: "smoothstep",
-      style: { stroke: "#8a3ffc" },
+      style: { stroke: "#D02771" },
       label: "Circuit",
-      labelStyle: { fill: "#8a3ffc", fontWeight: 600, fontSize: 12 },
+      labelStyle: { fill: "#D02771", fontWeight: 600, fontSize: 12 },
       labelBgStyle: { fill: "white", fillOpacity: 0.9 },
       labelBgPadding: [8, 4],
     },
@@ -315,9 +315,9 @@ const maxCut: CircuitDemo = {
       target: "estimator-optimization",
       animated: true,
       type: "smoothstep",
-      style: { stroke: "#e83e8c" },
+      style: { stroke: "#893FFC" },
       label: "Optimized",
-      labelStyle: { fill: "#e83e8c", fontWeight: 600, fontSize: 12 },
+      labelStyle: { fill: "#893FFC", fontWeight: 600, fontSize: 12 },
       labelBgStyle: { fill: "white", fillOpacity: 0.9 },
       labelBgPadding: [8, 4],
     },
@@ -327,9 +327,9 @@ const maxCut: CircuitDemo = {
       target: "estimator-session",
       animated: true,
       type: "smoothstep",
-      style: { stroke: "#2563EB" },
+      style: { stroke: "#0E62FE" },
       label: "Parameters",
-      labelStyle: { fill: "#2563EB", fontWeight: 600, fontSize: 12 },
+      labelStyle: { fill: "#0E62FE", fontWeight: 600, fontSize: 12 },
       labelBgStyle: { fill: "white", fillOpacity: 0.9 },
       labelBgPadding: [8, 4],
     },
@@ -339,9 +339,9 @@ const maxCut: CircuitDemo = {
       target: "sampler",
       animated: true,
       type: "smoothstep",
-      style: { stroke: "#2563EB" },
+      style: { stroke: "#0E62FE" },
       label: "Final circuit",
-      labelStyle: { fill: "#2563EB", fontWeight: 600, fontSize: 12 },
+      labelStyle: { fill: "#0E62FE", fontWeight: 600, fontSize: 12 },
       labelBgStyle: { fill: "white", fillOpacity: 0.9 },
       labelBgPadding: [8, 4],
     },
@@ -352,9 +352,9 @@ const maxCut: CircuitDemo = {
       target: "Output",
       animated: true,
       type: "smoothstep",
-      style: { stroke: "#2563EB" },
+      style: { stroke: "#0E62FE" },
       label: "Results",
-      labelStyle: { fill: "#2563EB", fontWeight: 600, fontSize: 12 },
+      labelStyle: { fill: "#0E62FE", fontWeight: 600, fontSize: 12 },
       labelBgStyle: { fill: "white", fillOpacity: 0.9 },
       labelBgPadding: [8, 4],
     },
@@ -371,8 +371,8 @@ const chshInequality: CircuitDemo = {
     {
       id: "bell-state-circuit",
       type: "circuitLibraryNode",
-      data: { 
-        label: "Bell State Circuit", 
+      data: {
+        label: "Circuit Library",
         category: "Entanglement",
         details: "H + CNOT + RY(θ) with 21 phases"
       },
@@ -381,8 +381,8 @@ const chshInequality: CircuitDemo = {
     {
       id: "chsh-observables",
       type: "quantumInfoNode",
-      data: { 
-        label: "CHSH Observables", 
+      data: {
+        label: "Quantum Info Library",
         category: "SparsePauliOp",
         details: "CHSH1 and CHSH2 operators"
       },
@@ -392,7 +392,7 @@ const chshInequality: CircuitDemo = {
     {
       id: "transpiler",
       type: "transpilerNode",
-      data: { 
+      data: {
         label: "Transpiler",
         category: "Optimization",
         optimizationLevel: 3,
@@ -409,7 +409,7 @@ const chshInequality: CircuitDemo = {
       id: "estimator",
       type: "runtimeNode",
       data: {
-        label: "Estimator",
+        label: "Runtime Primitives",
         category: "Estimator",
         resilience_level: 1,
         details: "EstimatorV2 with ISA circuit and observables"
@@ -420,7 +420,7 @@ const chshInequality: CircuitDemo = {
       id: "execute-job",
       type: "executionNode",
       data: {
-        label: "Execute Job",
+        label: "Execution Modes",
         category: "Job",
         details: "Run estimator with 21 phase values"
       },
@@ -431,7 +431,7 @@ const chshInequality: CircuitDemo = {
       id: "Output",
       type: "visualizationNode",
       data: {
-        label: "Output",
+        label: "Visualization Module",
         category: "Plot",
         details: "CHSH1 and CHSH2 expectation values",
         defaultText: "{'CHSH1': [2.01953125, 1.30224609375, 0.46044921875, -0.4658203125, -1.29443359375, -2.00146484375, -2.53271484375, -2.77783203125, -2.7802734375, -2.552734375, -2.01123046875, -1.3134765625, -0.4375, 0.4697265625, 1.30712890625, 1.943359375, 2.4951171875, 2.79541015625, 2.78369140625, 2.52978515625, 1.96826171875], 'CHSH2': [1.98046875, 2.48095703125, 2.81298828125, 2.7841796875, 2.53759765625, 1.99853515625, 1.25830078125, 0.45068359375, -0.4541015625, -1.2587890625, -1.98876953125, -2.5029296875, -2.8251953125, -2.7763671875, -2.50341796875, -2.056640625, -1.3125, -0.42138671875, 0.43408203125, 1.28076171875, 2.03173828125]}"
@@ -447,9 +447,9 @@ const chshInequality: CircuitDemo = {
       target: "chsh-observables",
       animated: true,
       type: "smoothstep",
-      style: { stroke: "#8a3ffc" },
+      style: { stroke: "#D02771" },
       label: "Circuit",
-      labelStyle: { fill: "#8a3ffc", fontWeight: 600, fontSize: 12 },
+      labelStyle: { fill: "#D02771", fontWeight: 600, fontSize: 12 },
       labelBgStyle: { fill: "white", fillOpacity: 0.9 },
       labelBgPadding: [8, 4],
     },
@@ -460,9 +460,9 @@ const chshInequality: CircuitDemo = {
       target: "transpiler",
       animated: true,
       type: "smoothstep",
-      style: { stroke: "#8a3ffc" },
+      style: { stroke: "#D02771" },
       label: "Observables",
-      labelStyle: { fill: "#8a3ffc", fontWeight: 600, fontSize: 12 },
+      labelStyle: { fill: "#D02771", fontWeight: 600, fontSize: 12 },
       labelBgStyle: { fill: "white", fillOpacity: 0.9 },
       labelBgPadding: [8, 4],
     },
@@ -473,9 +473,9 @@ const chshInequality: CircuitDemo = {
       target: "estimator",
       animated: true,
       type: "smoothstep",
-      style: { stroke: "#e83e8c" },
+      style: { stroke: "#893FFC" },
       label: "Optimized",
-      labelStyle: { fill: "#e83e8c", fontWeight: 600, fontSize: 12 },
+      labelStyle: { fill: "#893FFC", fontWeight: 600, fontSize: 12 },
       labelBgStyle: { fill: "white", fillOpacity: 0.9 },
       labelBgPadding: [8, 4],
     },
@@ -485,9 +485,9 @@ const chshInequality: CircuitDemo = {
       target: "execute-job",
       animated: true,
       type: "smoothstep",
-      style: { stroke: "#2563EB" },
+      style: { stroke: "#0E62FE" },
       label: "Execute",
-      labelStyle: { fill: "#2563EB", fontWeight: 600, fontSize: 12 },
+      labelStyle: { fill: "#0E62FE", fontWeight: 600, fontSize: 12 },
       labelBgStyle: { fill: "white", fillOpacity: 0.9 },
       labelBgPadding: [8, 4],
     },
@@ -498,9 +498,9 @@ const chshInequality: CircuitDemo = {
       target: "Output",
       animated: true,
       type: "smoothstep",
-      style: { stroke: "#2563EB" },
+      style: { stroke: "#0E62FE" },
       label: "Results",
-      labelStyle: { fill: "#2563EB", fontWeight: 600, fontSize: 12 },
+      labelStyle: { fill: "#0E62FE", fontWeight: 600, fontSize: 12 },
       labelBgStyle: { fill: "white", fillOpacity: 0.9 },
       labelBgPadding: [8, 4],
     },

@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ChevronDown, ChevronUp, Info } from "lucide-react"
+import { ExecuteIcon } from "@/components/icons/execute-icon"
 import { Spinner } from "@/components/ui/spinner"
 import {
   Dialog,
@@ -80,7 +81,7 @@ export const RuntimeNode = ({ id, data, isConnectable }: NodeProps<RuntimeNodeDa
 
   const handleResilienceChange = (value: number[]) => {
     const level = value[0];
-    
+
     const newOptions = {
       resilience_level: level,
       custom_error_settings: {
@@ -127,7 +128,7 @@ export const RuntimeNode = ({ id, data, isConnectable }: NodeProps<RuntimeNodeDa
 
   const handleResilienceCommit = (value: number[]) => {
     const level = value[0];
-    
+
     const newOptions = {
       resilience_level: level,
       custom_error_settings: {
@@ -152,12 +153,7 @@ export const RuntimeNode = ({ id, data, isConnectable }: NodeProps<RuntimeNodeDa
     <Card className="w-64 border-0 shadow-md rounded-none overflow-hidden">
       <div className="bg-[#E4EDF7] h-12 flex items-center">
         <div className="w-12 h-12 bg-[#0E62FE] flex items-center justify-center text-white mr-2">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-            <path d="M3 3v5h5" />
-            <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
-            <path d="M16 16h5v5" />
-          </svg>
+          <ExecuteIcon className="w-6 h-6 text-white" />
         </div>
         <div className="text-sm font-medium text-black flex-1 flex items-center">
           {data.label}
@@ -258,14 +254,14 @@ export const RuntimeNode = ({ id, data, isConnectable }: NodeProps<RuntimeNodeDa
                 <span className="text-sm text-[#333] font-medium mb-2">Resilience Level</span>
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-[#333]">0</span>
-                  <Slider 
-                    value={[options.resilience_level]} 
+                  <Slider
+                    value={[options.resilience_level]}
                     onValueChange={handleResilienceChange}
                     onValueCommit={handleResilienceCommit}
                     min={0}
-                    max={2} 
-                    step={1} 
-                    className="w-24 mx-2" 
+                    max={2}
+                    step={1}
+                    className="w-24 mx-2"
                   />
                   <span className="text-xs text-[#333]">2</span>
                 </div>
@@ -379,14 +375,12 @@ export const RuntimeNode = ({ id, data, isConnectable }: NodeProps<RuntimeNodeDa
                           setOptions(newOptions);
                           sendResilienceConfig(newOptions);
                         }}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${
-                          options.custom_error_settings.dynamical_decoupling ? 'bg-[#1A8038]' : 'bg-gray-200'
-                        }`}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${options.custom_error_settings.dynamical_decoupling ? 'bg-[#1A8038]' : 'bg-gray-200'
+                          }`}
                       >
                         <span
-                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                            options.custom_error_settings.dynamical_decoupling ? 'translate-x-6' : 'translate-x-1'
-                          }`}
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${options.custom_error_settings.dynamical_decoupling ? 'translate-x-6' : 'translate-x-1'
+                            }`}
                         />
                         {options.custom_error_settings.dynamical_decoupling && (
                           <span className="absolute left-1.5 top-1 text-white text-xs">✓</span>
@@ -412,14 +406,12 @@ export const RuntimeNode = ({ id, data, isConnectable }: NodeProps<RuntimeNodeDa
                           setOptions(newOptions);
                           sendResilienceConfig(newOptions);
                         }}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${
-                          options.custom_error_settings.gate_twirling ? 'bg-[#1A8038]' : 'bg-gray-200'
-                        }`}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${options.custom_error_settings.gate_twirling ? 'bg-[#1A8038]' : 'bg-gray-200'
+                          }`}
                       >
                         <span
-                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                            options.custom_error_settings.gate_twirling ? 'translate-x-6' : 'translate-x-1'
-                          }`}
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${options.custom_error_settings.gate_twirling ? 'translate-x-6' : 'translate-x-1'
+                            }`}
                         />
                         {options.custom_error_settings.gate_twirling && (
                           <span className="absolute left-1.5 top-1 text-white text-xs">✓</span>
@@ -449,14 +441,12 @@ export const RuntimeNode = ({ id, data, isConnectable }: NodeProps<RuntimeNodeDa
                           setOptions(newOptions);
                           sendResilienceConfig(newOptions);
                         }}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${
-                          options.custom_error_settings.m3 ? 'bg-[#1A8038]' : 'bg-gray-200'
-                        }`}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${options.custom_error_settings.m3 ? 'bg-[#1A8038]' : 'bg-gray-200'
+                          }`}
                       >
                         <span
-                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                            options.custom_error_settings.m3 ? 'translate-x-6' : 'translate-x-1'
-                          }`}
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${options.custom_error_settings.m3 ? 'translate-x-6' : 'translate-x-1'
+                            }`}
                         />
                         {options.custom_error_settings.m3 && (
                           <span className="absolute left-1.5 top-1 text-white text-xs">✓</span>
@@ -489,14 +479,12 @@ export const RuntimeNode = ({ id, data, isConnectable }: NodeProps<RuntimeNodeDa
                           setOptions(newOptions);
                           sendResilienceConfig(newOptions);
                         }}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${
-                          options.custom_error_settings.dynamical_decoupling ? 'bg-[#1A8038]' : 'bg-gray-200'
-                        }`}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${options.custom_error_settings.dynamical_decoupling ? 'bg-[#1A8038]' : 'bg-gray-200'
+                          }`}
                       >
                         <span
-                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                            options.custom_error_settings.dynamical_decoupling ? 'translate-x-6' : 'translate-x-1'
-                          }`}
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${options.custom_error_settings.dynamical_decoupling ? 'translate-x-6' : 'translate-x-1'
+                            }`}
                         />
                         {options.custom_error_settings.dynamical_decoupling && (
                           <span className="absolute left-1.5 top-1 text-white text-xs">✓</span>
@@ -522,14 +510,12 @@ export const RuntimeNode = ({ id, data, isConnectable }: NodeProps<RuntimeNodeDa
                           setOptions(newOptions);
                           sendResilienceConfig(newOptions);
                         }}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${
-                          options.custom_error_settings.gate_twirling ? 'bg-[#1A8038]' : 'bg-gray-200'
-                        }`}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${options.custom_error_settings.gate_twirling ? 'bg-[#1A8038]' : 'bg-gray-200'
+                          }`}
                       >
                         <span
-                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                            options.custom_error_settings.gate_twirling ? 'translate-x-6' : 'translate-x-1'
-                          }`}
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${options.custom_error_settings.gate_twirling ? 'translate-x-6' : 'translate-x-1'
+                            }`}
                         />
                         {options.custom_error_settings.gate_twirling && (
                           <span className="absolute left-1.5 top-1 text-white text-xs">✓</span>
@@ -552,21 +538,19 @@ export const RuntimeNode = ({ id, data, isConnectable }: NodeProps<RuntimeNodeDa
                         type="button"
                         onClick={() => {
                           const checked = !options.custom_error_settings.trex;
-                          const newOptions = { 
-                            ...options, 
-                            custom_error_settings: { ...options.custom_error_settings, trex: checked } 
+                          const newOptions = {
+                            ...options,
+                            custom_error_settings: { ...options.custom_error_settings, trex: checked }
                           };
                           setOptions(newOptions);
                           sendResilienceConfig(newOptions);
                         }}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${
-                          options.custom_error_settings.trex ? 'bg-[#1A8038]' : 'bg-gray-200'
-                        }`}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${options.custom_error_settings.trex ? 'bg-[#1A8038]' : 'bg-gray-200'
+                          }`}
                       >
                         <span
-                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                            options.custom_error_settings.trex ? 'translate-x-6' : 'translate-x-1'
-                          }`}
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${options.custom_error_settings.trex ? 'translate-x-6' : 'translate-x-1'
+                            }`}
                         />
                         {options.custom_error_settings.trex && (
                           <span className="absolute left-1.5 top-1 text-white text-xs">✓</span>
@@ -592,14 +576,12 @@ export const RuntimeNode = ({ id, data, isConnectable }: NodeProps<RuntimeNodeDa
                           setOptions(newOptions);
                           sendResilienceConfig(newOptions);
                         }}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${
-                          options.custom_error_settings.m3 ? 'bg-[#1A8038]' : 'bg-gray-200'
-                        }`}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${options.custom_error_settings.m3 ? 'bg-[#1A8038]' : 'bg-gray-200'
+                          }`}
                       >
                         <span
-                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                            options.custom_error_settings.m3 ? 'translate-x-6' : 'translate-x-1'
-                          }`}
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${options.custom_error_settings.m3 ? 'translate-x-6' : 'translate-x-1'
+                            }`}
                         />
                         {options.custom_error_settings.m3 && (
                           <span className="absolute left-1.5 top-1 text-white text-xs">✓</span>
@@ -622,21 +604,19 @@ export const RuntimeNode = ({ id, data, isConnectable }: NodeProps<RuntimeNodeDa
                         type="button"
                         onClick={() => {
                           const checked = !options.custom_error_settings.zne;
-                          const newOptions = { 
-                            ...options, 
-                            custom_error_settings: { ...options.custom_error_settings, zne: checked } 
+                          const newOptions = {
+                            ...options,
+                            custom_error_settings: { ...options.custom_error_settings, zne: checked }
                           };
                           setOptions(newOptions);
                           sendResilienceConfig(newOptions);
                         }}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${
-                          options.custom_error_settings.zne ? 'bg-[#1A8038]' : 'bg-gray-200'
-                        }`}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${options.custom_error_settings.zne ? 'bg-[#1A8038]' : 'bg-gray-200'
+                          }`}
                       >
                         <span
-                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                            options.custom_error_settings.zne ? 'translate-x-6' : 'translate-x-1'
-                          }`}
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${options.custom_error_settings.zne ? 'translate-x-6' : 'translate-x-1'
+                            }`}
                         />
                         {options.custom_error_settings.zne && (
                           <span className="absolute left-1.5 top-1 text-white text-xs">✓</span>
@@ -662,14 +642,12 @@ export const RuntimeNode = ({ id, data, isConnectable }: NodeProps<RuntimeNodeDa
                           setOptions(newOptions);
                           sendResilienceConfig(newOptions);
                         }}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${
-                          options.custom_error_settings.gate_folding ? 'bg-[#1A8038]' : 'bg-gray-200'
-                        }`}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${options.custom_error_settings.gate_folding ? 'bg-[#1A8038]' : 'bg-gray-200'
+                          }`}
                       >
                         <span
-                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                            options.custom_error_settings.gate_folding ? 'translate-x-6' : 'translate-x-1'
-                          }`}
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${options.custom_error_settings.gate_folding ? 'translate-x-6' : 'translate-x-1'
+                            }`}
                         />
                         {options.custom_error_settings.gate_folding && (
                           <span className="absolute left-1.5 top-1 text-white text-xs">✓</span>
@@ -688,21 +666,19 @@ export const RuntimeNode = ({ id, data, isConnectable }: NodeProps<RuntimeNodeDa
                         type="button"
                         onClick={() => {
                           const checked = !options.custom_error_settings.pea;
-                          const newOptions = { 
-                            ...options, 
-                            custom_error_settings: { ...options.custom_error_settings, pea: checked } 
+                          const newOptions = {
+                            ...options,
+                            custom_error_settings: { ...options.custom_error_settings, pea: checked }
                           };
                           setOptions(newOptions);
                           sendResilienceConfig(newOptions);
                         }}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${
-                          options.custom_error_settings.pea ? 'bg-[#1A8038]' : 'bg-gray-200'
-                        }`}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${options.custom_error_settings.pea ? 'bg-[#1A8038]' : 'bg-gray-200'
+                          }`}
                       >
                         <span
-                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                            options.custom_error_settings.pea ? 'translate-x-6' : 'translate-x-1'
-                          }`}
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${options.custom_error_settings.pea ? 'translate-x-6' : 'translate-x-1'
+                            }`}
                         />
                         {options.custom_error_settings.pea && (
                           <span className="absolute left-1.5 top-1 text-white text-xs">✓</span>
@@ -721,21 +697,19 @@ export const RuntimeNode = ({ id, data, isConnectable }: NodeProps<RuntimeNodeDa
                         type="button"
                         onClick={() => {
                           const checked = !options.custom_error_settings.pec;
-                          const newOptions = { 
-                            ...options, 
-                            custom_error_settings: { ...options.custom_error_settings, pec: checked } 
+                          const newOptions = {
+                            ...options,
+                            custom_error_settings: { ...options.custom_error_settings, pec: checked }
                           };
                           setOptions(newOptions);
                           sendResilienceConfig(newOptions);
                         }}
-                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${
-                          options.custom_error_settings.pec ? 'bg-[#1A8038]' : 'bg-gray-200'
-                        }`}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A8038] focus:ring-offset-2 ${options.custom_error_settings.pec ? 'bg-[#1A8038]' : 'bg-gray-200'
+                          }`}
                       >
                         <span
-                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                            options.custom_error_settings.pec ? 'translate-x-6' : 'translate-x-1'
-                          }`}
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${options.custom_error_settings.pec ? 'translate-x-6' : 'translate-x-1'
+                            }`}
                         />
                         {options.custom_error_settings.pec && (
                           <span className="absolute left-1.5 top-1 text-white text-xs">✓</span>
@@ -747,53 +721,53 @@ export const RuntimeNode = ({ id, data, isConnectable }: NodeProps<RuntimeNodeDa
               )}
 
 
-              
 
-              
 
-              
 
-              
 
-              
 
-              
 
-              
+
+
+
+
+
+
+
             </>
           )}
         </div>
       </div>
-      <Handle 
-        type="target" 
-        position={Position.Top} 
-        isConnectable={isConnectable} 
-        style={{ 
-          backgroundColor: 'white', 
-          border: '1px solid #0E62FE', 
-          borderRadius: '50%', 
-          width: '16px', 
-          height: '16px', 
-          display: 'flex', 
-          alignItems: 'center', 
+      <Handle
+        type="target"
+        position={Position.Top}
+        isConnectable={isConnectable}
+        style={{
+          backgroundColor: 'white',
+          border: '1px solid #0E62FE',
+          borderRadius: '50%',
+          width: '16px',
+          height: '16px',
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
           top: '-20px'
         }}
       >
         <div style={{ backgroundColor: '#0E62FE', borderRadius: '50%', width: '6px', height: '6px' }} />
       </Handle>
-      <Handle 
-        type="source" 
-        position={Position.Bottom} 
-        isConnectable={isConnectable} 
-        style={{ 
-          backgroundColor: 'white', 
-          border: '1px solid #0E62FE', 
-          borderRadius: '50%', 
-          width: '16px', 
-          height: '16px', 
-          display: 'flex', 
-          alignItems: 'center', 
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        isConnectable={isConnectable}
+        style={{
+          backgroundColor: 'white',
+          border: '1px solid #0E62FE',
+          borderRadius: '50%',
+          width: '16px',
+          height: '16px',
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: 'center',
           bottom: '-20px'
         }}
